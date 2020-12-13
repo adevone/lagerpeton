@@ -79,7 +79,7 @@ class Logger<TAccumulator> private constructor(
             return totalMask
         }
 
-        val allLevels: Array<Int> = arrayOf(INFO, ERROR, DEBUG, WARNING)
+        val allLevels: Array<Int> get() = arrayOf(INFO, ERROR, DEBUG, WARNING)
     }
 }
 
