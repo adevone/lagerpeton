@@ -13,16 +13,16 @@ repositories {
 }
 
 android {
-    compileSdkVersion(28)
+    compileSdkVersion(29)
 
     defaultConfig {
-        minSdkVersion(21)
-        targetSdkVersion(28)
+        minSdkVersion(1)
+        targetSdkVersion(29)
     }
 
     compileOptions {
-        targetCompatibility = JavaVersion.VERSION_1_8
-        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_6
+        sourceCompatibility = JavaVersion.VERSION_1_6
     }
 }
 
