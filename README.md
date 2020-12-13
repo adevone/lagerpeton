@@ -1,5 +1,20 @@
 [Lagerpeton](https://en.wikipedia.org/wiki/Lagerpeton) is an ancient ornithodira lived ~236–234 million years ago. Any reference to class [Logger](https://docs.oracle.com/javase/7/docs/api/java/util/logging/Logger.html) and to language [Peton](https://www.python.org/) is purely coincidental
 
+```kotlin
+// in root build.gradle
+allprojects {
+    repositories {
+        // ...
+        maven { url = uri("https://dl.bintray.com/summermpp/summer") }
+    }
+}
+
+// in module build.gradle
+dependencies {
+    implementation("io.adev:lagerpeton:0.1.0")
+}
+```
+
 ## What the library for
 
 Lagerpeton allows accumulation of context for logging.

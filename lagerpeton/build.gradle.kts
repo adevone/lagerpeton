@@ -1,10 +1,13 @@
+import java.util.Properties
+
 plugins {
-    id("com.android.library")
     kotlin("multiplatform")
+    id("com.android.library")
+    id("maven-publish")
 }
 
-group = "org.example"
-version = "1.0-SNAPSHOT"
+group = "io.adev"
+version = "0.1.0"
 
 repositories {
     jcenter()
@@ -29,6 +32,21 @@ android {
 kotlin {
     jvm()
     android()
+    iosArm64 {
+        binaries {
+            framework()
+        }
+    }
+    iosArm32 {
+        binaries {
+            framework()
+        }
+    }
+    iosX64 {
+        binaries {
+            framework()
+        }
+    }
 
     sourceSets {
         val commonMain by getting {
@@ -58,5 +76,37 @@ kotlin {
                 implementation(kotlin("stdlib"))
             }
         }
+        val iosArm64Main by getting {
+            dependencies {
+
+            }
+        }
+        getByName("iosX64Main").dependsOn(getByName("iosArm64Main"))
+        getByName("iosArm32Main").dependsOn(getByName("iosArm64Main"))
+    }
+}
+
+val propsFile = File(rootProject.rootDir, "bintray.properties")
+if (propsFile.exists()) {
+    publishing {
+        val bintrayProps = Properties().apply {
+            load(propsFile.inputStream())
+        }
+        repositories {
+            maven("https://api.bintray.com/maven/summermpp/summer/lagerpeton/;publish=0") {
+                name = "bintray"
+
+                credentials {
+                    username = bintrayProps.getProperty("USERNAME")
+                    password = bintrayProps.getProperty("API_KEY")
+                }
+            }
+        }
+    }
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "1.6"
     }
 }
