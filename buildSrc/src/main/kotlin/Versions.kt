@@ -1,4 +1,4 @@
-const val lagerpetonVersion = "0.1.2"
+const val lagerpetonVersion = "0.1.3"
 const val lagerpetonGroup = "io.adev"
 
 // library dependencies

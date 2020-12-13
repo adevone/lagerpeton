@@ -69,10 +69,11 @@ class ConsolePrinterTests {
         val key2 = "testKey2"
         val value2 = "testValue2"
         val printer = TestPrinter()
-        val logger = Lager.new(printer, owner = owner)
+        val logger = Lager.new(printer, owner = owner).new {
+            it.put(key2, value2)
+        }
         logger.info(message) {
             it.put(key1, value1)
-            it.put(key2, value2)
         }
         assertEquals("$owner: $message, $key1=$value1, $key2=$value2", printer.logMessage)
     }

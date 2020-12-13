@@ -44,7 +44,7 @@ object ConsolePrinter : TypedLager.Printer<PrimitivesOnlyAccumulator> {
         ) {
             builder.apply {
                 var isFirstParameter = true
-                accumulator.values.onEach { entry ->
+                accumulator.values.entries.reversed().forEach { entry ->
                     if (isFirstParameter) {
                         isFirstParameter = false
                     } else {
