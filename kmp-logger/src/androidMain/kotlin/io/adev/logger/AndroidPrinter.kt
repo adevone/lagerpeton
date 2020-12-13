@@ -5,7 +5,7 @@ import android.util.Log
 object AndroidPrinter : Logger.Printer<PrimitivesOnlyAccumulator> {
 
     override fun printLog(
-        level: Logger.Level,
+        level: Int,
         owner: String?,
         message: String,
         accumulator: PrimitivesOnlyAccumulator
@@ -18,16 +18,16 @@ object AndroidPrinter : Logger.Printer<PrimitivesOnlyAccumulator> {
             ConsolePrinter.Formatter.appendParameters(accumulator, builder = this)
         }
         when (level) {
-            Logger.Level.Info -> {
+            Logger.INFO -> {
                 Log.i(owner ?: DEFAULT_OWNER, logMessage)
             }
-            Logger.Level.Error -> {
+            Logger.ERROR -> {
                 Log.e(owner ?: DEFAULT_OWNER, logMessage)
             }
-            Logger.Level.Debug -> {
+            Logger.DEBUG -> {
                 Log.d(owner ?: DEFAULT_OWNER, logMessage)
             }
-            Logger.Level.Warning -> {
+            Logger.WARNING -> {
                 Log.w(owner ?: DEFAULT_OWNER, logMessage)
             }
         }

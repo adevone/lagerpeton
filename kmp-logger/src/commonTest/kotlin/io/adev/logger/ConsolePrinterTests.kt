@@ -81,7 +81,7 @@ class ConsolePrinterTests {
         var logMessage: String? = null
 
         override fun printLog(
-            level: Logger.Level,
+            level: Int,
             owner: String?,
             message: String,
             accumulator: PrimitivesOnlyAccumulator

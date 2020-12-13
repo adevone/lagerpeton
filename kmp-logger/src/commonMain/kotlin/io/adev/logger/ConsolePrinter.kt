@@ -3,7 +3,7 @@ package io.adev.logger
 object ConsolePrinter : Logger.Printer<PrimitivesOnlyAccumulator> {
 
     override fun printLog(
-        level: Logger.Level,
+        level: Int,
         owner: String?,
         message: String,
         accumulator: PrimitivesOnlyAccumulator

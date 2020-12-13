@@ -128,7 +128,7 @@ class LoggerTests {
         val printer = MockPrinter()
         val logger = Logger.new(
             printer,
-            printMask = Logger.Level.printMask(Logger.Level.Error)
+            printMask = Logger.makePrintMask(Logger.ERROR)
         ) {
             throw IllegalStateException("global append must not me called")
         }.new {
@@ -232,7 +232,7 @@ class LoggerTests {
         val printer = MockPrinter()
         val logger = Logger.new(printer)
         logger.info("")
-        assertEquals(Logger.Level.Info, printer.level)
+        assertEquals(Logger.INFO, printer.level)
     }
 
     @Test
@@ -240,7 +240,7 @@ class LoggerTests {
         val printer = MockPrinter()
         val logger = Logger.new(printer)
         logger.error("")
-        assertEquals(Logger.Level.Error, printer.level)
+        assertEquals(Logger.ERROR, printer.level)
     }
 
     @Test
@@ -248,7 +248,7 @@ class LoggerTests {
         val printer = MockPrinter()
         val logger = Logger.new(printer)
         logger.debug("")
-        assertEquals(Logger.Level.Debug, printer.level)
+        assertEquals(Logger.DEBUG, printer.level)
     }
 
     @Test
@@ -256,7 +256,16 @@ class LoggerTests {
         val printer = MockPrinter()
         val logger = Logger.new(printer)
         logger.warning("")
-        assertEquals(Logger.Level.Warning, printer.level)
+        assertEquals(Logger.WARNING, printer.level)
+    }
+
+    @Test
+    fun printCustomLevel() {
+        val level = 666
+        val printer = MockPrinter()
+        val logger = Logger.new(printer, printMask = Logger.makePrintMask(level))
+        logger.log(level, "")
+        assertEquals(level, printer.level)
     }
 
     @Test
@@ -264,7 +273,7 @@ class LoggerTests {
         val printer = MockPrinter()
         val logger = Logger.new(
             printer,
-            printMask = Logger.Level.printMask(*levelsWithout(Logger.Level.Info))
+            printMask = Logger.makePrintMask(*levelsWithout(Logger.INFO))
         )
         logger.info("")
         assertFalse(printer.wasPrinted)
@@ -275,7 +284,7 @@ class LoggerTests {
         val printer = MockPrinter()
         val logger = Logger.new(
             printer,
-            printMask = Logger.Level.printMask(*levelsWithout(Logger.Level.Error))
+            printMask = Logger.makePrintMask(*levelsWithout(Logger.ERROR))
         )
         logger.error("")
         assertFalse(printer.wasPrinted)
@@ -286,7 +295,7 @@ class LoggerTests {
         val printer = MockPrinter()
         val logger = Logger.new(
             printer,
-            printMask = Logger.Level.printMask(*levelsWithout(Logger.Level.Debug))
+            printMask = Logger.makePrintMask(*levelsWithout(Logger.DEBUG))
         )
         logger.debug("")
         assertFalse(printer.wasPrinted)
@@ -297,25 +306,25 @@ class LoggerTests {
         val printer = MockPrinter()
         val logger = Logger.new(
             printer,
-            printMask = Logger.Level.printMask(*levelsWithout(Logger.Level.Warning))
+            printMask = Logger.makePrintMask(*levelsWithout(Logger.WARNING))
         )
         logger.warning("")
         assertFalse(printer.wasPrinted)
     }
 
-    private fun levelsWithout(level: Logger.Level): Array<Logger.Level> {
-        return Logger.Level.values().filter { it != level }.toTypedArray()
+    private fun levelsWithout(level: Int): IntArray {
+        return Logger.allLevels.filter { it != level }.toIntArray()
     }
 
     private class MockPrinter : Logger.Printer<PrimitivesOnlyAccumulator> {
         var wasPrinted = false
-        var level: Logger.Level? = null
+        var level: Int? = null
         var owner: String? = null
         var message: String? = null
         var values: List<Any> = emptyList()
 
         override fun printLog(
-            level: Logger.Level,
+            level: Int,
             owner: String?,
             message: String,
             accumulator: PrimitivesOnlyAccumulator
