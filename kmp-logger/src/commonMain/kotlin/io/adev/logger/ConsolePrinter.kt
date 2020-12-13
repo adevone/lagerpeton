@@ -6,14 +6,14 @@ object ConsolePrinter : Logger.Printer {
         level: Logger.Level,
         owner: String?,
         message: String,
-        values: List<Logger.Entry>
+        values: MutableMap<String, Any?>
     ) {
         val logMessage = Formatter.format(owner, message, values)
         println(logMessage)
     }
 
     object Formatter {
-        fun format(owner: String?, message: String?, values: List<Logger.Entry>): String {
+        fun format(owner: String?, message: String?, values: Map<String, Any?>): String {
             return buildString {
                 owner?.let { owner ->
                     append(owner)
@@ -22,11 +22,11 @@ object ConsolePrinter : Logger.Printer {
                 message?.let { message ->
                     append(message)
                 }
-                values.forEach { entry ->
+                values.onEach { entry ->
                     append(", ") // append always because "," is also needed after [message]
                     append(entry.key)
                     append("=")
-                    append(entry.stringValue())
+                    append(entry.value)
                 }
             }
         }

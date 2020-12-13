@@ -2,6 +2,7 @@ package io.adev.logger
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 class LoggerTests {
 
@@ -23,7 +24,7 @@ class LoggerTests {
         logger.info("") {
             it.put(key, value)
         }
-        assertEquals(listOf(Logger.Entry.Str(key, value)), printer.values)
+        assertEquals(listOf(key to value), printer.values)
     }
 
     @Test
@@ -35,7 +36,7 @@ class LoggerTests {
             it.put(key, value)
         }
         logger.info("")
-        assertEquals(listOf(Logger.Entry.Str(key, value)), printer.values)
+        assertEquals(listOf(key to value), printer.values)
     }
 
     @Test
@@ -48,7 +49,7 @@ class LoggerTests {
             it.put(key, value)
         }
         logger.info("")
-        assertEquals(listOf(Logger.Entry.Str(key, value)), printer.values)
+        assertEquals(listOf(key to value), printer.values)
     }
 
     @Test
@@ -62,7 +63,7 @@ class LoggerTests {
             it.put(key, value)
         }
         logger.info("")
-        assertEquals(listOf(Logger.Entry.Str(key, value)), printer.values)
+        assertEquals(listOf(key to value), printer.values)
     }
 
     @Test
@@ -76,7 +77,7 @@ class LoggerTests {
         logger.info("") {
             it.put(key, value)
         }
-        assertEquals(listOf(Logger.Entry.Str(key, value)), printer.values)
+        assertEquals(listOf(key to value), printer.values)
     }
 
     @Test
@@ -92,7 +93,7 @@ class LoggerTests {
         logger.info("") {
             it.put(key, value)
         }
-        assertEquals(listOf(Logger.Entry.Str(key, value)), printer.values)
+        assertEquals(listOf(key to value), printer.values)
     }
 
     @Test
@@ -114,9 +115,9 @@ class LoggerTests {
         }
         assertEquals(
             listOf(
-                Logger.Entry.Str(key1, value1),
-                Logger.Entry.Str(key2, value2),
-                Logger.Entry.Str(key3, value3)
+                key1 to value1,
+                key2 to value2,
+                key3 to value3
             ),
             printer.values
         )
@@ -128,70 +129,102 @@ class LoggerTests {
         val logger = Logger.new(
             printer,
             printMask = Logger.Level.printMask(Logger.Level.Error)
-        )
+        ) {
+            throw IllegalStateException("global append must not me called")
+        }.new {
+            throw IllegalStateException("copy append must not me called")
+        }
         logger.info("") {
-            throw IllegalStateException("must not me called")
+            throw IllegalStateException("message append must not me called")
         }
     }
 
     @Test
+    fun globalValueChanged() {
+        val key = "testKey"
+        var value = "notAValue"
+        val expectedValue = "aValue"
+        val printer = MockPrinter()
+        val logger = Logger.new(printer) {
+            it.put(key, value)
+        }
+        value = expectedValue
+        logger.info("")
+        assertEquals(listOf(key to expectedValue), printer.values)
+    }
+
+    @Test
+    fun copyValueChanged() {
+        val key = "testKey"
+        var value = "notAValue"
+        val expectedValue = "aValue"
+        val printer = MockPrinter()
+        val logger = Logger.new(printer).new {
+            it.put(key, value)
+        }
+        value = expectedValue
+        logger.info("")
+        assertEquals(listOf(key to expectedValue), printer.values)
+    }
+
+    @Test
     fun printInt() {
-        val key = "intKey"
+        val key = "testKey"
         val value = 123
         val printer = MockPrinter()
         val logger = Logger.new(printer)
         logger.info("") {
             it.put(key, value)
         }
-        assertEquals(listOf(Logger.Entry.Integer(key, value)), printer.values)
+        assertEquals(listOf(key to value), printer.values)
     }
 
     @Test
     fun printLong() {
-        val key = "intKey"
+        val key = "testKey"
         val value = 123L
         val printer = MockPrinter()
         val logger = Logger.new(printer)
         logger.info("") {
             it.put(key, value)
         }
-        assertEquals(listOf(Logger.Entry.Lng(key, value)), printer.values)
+        assertEquals(listOf(key to value), printer.values)
     }
 
     @Test
     fun printFloat() {
-        val key = "intKey"
+        val key = "testKey"
         val value = 123f
         val printer = MockPrinter()
         val logger = Logger.new(printer)
         logger.info("") {
             it.put(key, value)
         }
-        assertEquals(listOf(Logger.Entry.Flt(key, value)), printer.values)
+        assertEquals(listOf(key to value), printer.values)
     }
 
     @Test
     fun printDouble() {
-        val key = "intKey"
+        val key = "testKey"
         val value = 123.0
         val printer = MockPrinter()
         val logger = Logger.new(printer)
         logger.info("") {
             it.put(key, value)
         }
-        assertEquals(listOf(Logger.Entry.Dbl(key, value)), printer.values)
+        assertEquals(listOf(key to value), printer.values)
     }
 
     @Test
     fun printBoolean() {
-        val key = "intKey"
+        val key = "testKey"
         val value = true
         val printer = MockPrinter()
         val logger = Logger.new(printer)
         logger.info("") {
             it.put(key, value)
         }
-        assertEquals(listOf(Logger.Entry.Booln(key, value)), printer.values)
+        assertEquals(listOf(key to value), printer.values)
     }
 
     @Test
@@ -226,21 +259,71 @@ class LoggerTests {
         assertEquals(Logger.Level.Warning, printer.level)
     }
 
+    @Test
+    fun dontPrintInfo() {
+        val printer = MockPrinter()
+        val logger = Logger.new(
+            printer,
+            printMask = Logger.Level.printMask(*levelsWithout(Logger.Level.Info))
+        )
+        logger.info("")
+        assertFalse(printer.wasPrinted)
+    }
+
+    @Test
+    fun dontPrintError() {
+        val printer = MockPrinter()
+        val logger = Logger.new(
+            printer,
+            printMask = Logger.Level.printMask(*levelsWithout(Logger.Level.Error))
+        )
+        logger.error("")
+        assertFalse(printer.wasPrinted)
+    }
+
+    @Test
+    fun dontPrintDebug() {
+        val printer = MockPrinter()
+        val logger = Logger.new(
+            printer,
+            printMask = Logger.Level.printMask(*levelsWithout(Logger.Level.Debug))
+        )
+        logger.debug("")
+        assertFalse(printer.wasPrinted)
+    }
+
+    @Test
+    fun dontPrintWarning() {
+        val printer = MockPrinter()
+        val logger = Logger.new(
+            printer,
+            printMask = Logger.Level.printMask(*levelsWithout(Logger.Level.Warning))
+        )
+        logger.warning("")
+        assertFalse(printer.wasPrinted)
+    }
+
+    private fun levelsWithout(level: Logger.Level): Array<Logger.Level> {
+        return Logger.Level.values().filter { it != level }.toTypedArray()
+    }
+
     private class MockPrinter : Logger.Printer {
+        var wasPrinted = false
         var level: Logger.Level? = null
         var owner: String? = null
         var message: String? = null
-        var values: List<Logger.Entry> = emptyList()
+        var values: List<Any> = emptyList()
         override fun printLog(
             level: Logger.Level,
             owner: String?,
             message: String,
-            values: List<Logger.Entry>
+            values: MutableMap<String, Any?>
         ) {
+            this.wasPrinted = true
             this.level = level
             this.owner = owner
             this.message = message
-            this.values = values
+            this.values = values.map { (key, value) -> key to value }
         }
     }
 }

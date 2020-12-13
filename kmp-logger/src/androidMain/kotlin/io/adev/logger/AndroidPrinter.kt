@@ -8,7 +8,7 @@ object AndroidPrinter : Logger.Printer {
         level: Logger.Level,
         owner: String?,
         message: String,
-        values: List<Logger.Entry>
+        values: MutableMap<String, Any?>
     ) {
         when (level) {
             Logger.Level.Info -> {

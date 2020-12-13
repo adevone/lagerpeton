@@ -83,7 +83,7 @@ class ConsolePrinterTests {
             level: Logger.Level,
             owner: String?,
             message: String,
-            values: List<Logger.Entry>
+            values: MutableMap<String, Any?>
         ) {
             logMessage = ConsolePrinter.Formatter.format(
                 owner, message, values
