@@ -1,4 +1,4 @@
-[Lagerpeton](https://en.wikipedia.org/wiki/Lagerpeton) is an ancient reptile lived ~236–234 million years ago. Any reference to class [Logger](https://docs.oracle.com/javase/7/docs/api/java/util/logging/Logger.html) and to language [Peton](https://www.python.org/) is purely coincidental
+[Lagerpeton](https://en.wikipedia.org/wiki/Lagerpeton) is an ancient ornithodira lived ~236–234 million years ago. Any reference to class [Logger](https://docs.oracle.com/javase/7/docs/api/java/util/logging/Logger.html) and to language [Peton](https://www.python.org/) is purely coincidental
 
 ## What the library for
 
