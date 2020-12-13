@@ -1,6 +1,6 @@
 package io.adev.lagerpeton
 
-object ConsolePrinter : Lager.Printer<PrimitivesOnlyAccumulator> {
+object ConsolePrinter : TypedLager.Printer<PrimitivesOnlyAccumulator> {
 
     override fun printLog(
         level: Int,

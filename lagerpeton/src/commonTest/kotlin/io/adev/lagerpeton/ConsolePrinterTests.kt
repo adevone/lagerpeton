@@ -77,7 +77,7 @@ class ConsolePrinterTests {
         assertEquals("$owner: $message, $key1=$value1, $key2=$value2", printer.logMessage)
     }
 
-    private class TestPrinter : Lager.Printer<PrimitivesOnlyAccumulator> {
+    private class TestPrinter : TypedLager.Printer<PrimitivesOnlyAccumulator> {
         var logMessage: String? = null
 
         override fun printLog(

@@ -316,7 +316,7 @@ class LoggerTests {
         return Lager.allLevels.filter { it != level }.toIntArray()
     }
 
-    private class MockPrinter : Lager.Printer<PrimitivesOnlyAccumulator> {
+    private class MockPrinter : TypedLager.Printer<PrimitivesOnlyAccumulator> {
         var wasPrinted = false
         var level: Int? = null
         var owner: String? = null
