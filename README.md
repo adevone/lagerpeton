@@ -5,7 +5,7 @@
 Lagerpeton allows accumulation of context for logging.
 
 Example:
-```
+```kotlin
 // In App class
 val globalLogger = Logger.new(AndroidPrinter) {
     it.put("appVersion", "1.0.0")
