@@ -66,10 +66,12 @@ class Lager<TAccumulator> private constructor(
             return Lager(printer, printMask, owner, arrayOf(append))
         }
 
-        const val INFO = 0b0001
-        const val ERROR = 0b0010
-        const val DEBUG = 0b0100
+        // @formatter:off
+        const val INFO    = 0b0001
+        const val ERROR   = 0b0010
+        const val DEBUG   = 0b0100
         const val WARNING = 0b1000
+        // @formatter:on
 
         fun makePrintMask(vararg levels: Int): Int {
             var totalMask = 0
