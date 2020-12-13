@@ -34,7 +34,7 @@ class SomeViewModel {
 }
 ```
 
-Such title for [Lager](https://github.com/adevone/lagerpeton/blob/master/kmp-logger/src/commonMain/kotlin/io/adev/logger/Logger.kt) was chosen to not clash with another loggers like [java.util.logging.Logger](https://docs.oracle.com/javase/7/docs/api/java/util/logging/Logger.html). If the title annoys you can rename the logger in your project:
+Such title for [Lager](https://github.com/adevone/lagerpeton/blob/master/kmp-logger/src/commonMain/kotlin/io/adev/logger/Lager.kt) was chosen to not clash with another loggers like [java.util.logging.Logger](https://docs.oracle.com/javase/7/docs/api/java/util/logging/Logger.html). If the title annoys you can rename the logger in your project:
 ```
 typealias Logger = Lager
 ```
