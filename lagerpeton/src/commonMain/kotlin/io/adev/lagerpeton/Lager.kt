@@ -1,4 +1,4 @@
-package io.adev.logger
+package io.adev.lagerpeton
 
 class Lager<TAccumulator> private constructor(
     private val printer: Printer<TAccumulator>,

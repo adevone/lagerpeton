@@ -1,4 +1,4 @@
-package io.adev.logger
+package io.adev.lagerpeton
 
 class PrimitivesOnlyAccumulator {
     val values: MutableMap<String, Any> = mutableMapOf()

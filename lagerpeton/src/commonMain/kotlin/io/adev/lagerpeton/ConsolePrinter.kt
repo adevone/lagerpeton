@@ -1,4 +1,4 @@
-package io.adev.logger
+package io.adev.lagerpeton
 
 object ConsolePrinter : Lager.Printer<PrimitivesOnlyAccumulator> {
 

@@ -1,5 +1,5 @@
 enableFeaturePreview("GRADLE_METADATA")
 
-include(":kmp-logger")
+include(":lagerpeton")
 
-rootProject.name = "kmp-logger"
+rootProject.name = "lagerpeton"

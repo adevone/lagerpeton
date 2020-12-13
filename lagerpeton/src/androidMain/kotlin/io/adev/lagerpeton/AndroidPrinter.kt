@@ -1,4 +1,4 @@
-package io.adev.logger
+package io.adev.lagerpeton
 
 import android.util.Log
 
