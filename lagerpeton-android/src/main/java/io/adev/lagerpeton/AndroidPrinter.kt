@@ -2,7 +2,7 @@ package io.adev.lagerpeton
 
 import android.util.Log
 
-object AndroidPrinter : Lager.Printer<PrimitivesOnlyAccumulator> {
+object AndroidPrinter : TypedLager.Printer<PrimitivesOnlyAccumulator> {
 
     override fun printLog(
         level: Int,

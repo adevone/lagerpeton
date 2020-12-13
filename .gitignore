@@ -2,3 +2,4 @@
 /.idea
 /.gradle
 bintray.properties
+*.DS_Store

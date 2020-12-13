@@ -2,36 +2,14 @@ import java.util.Properties
 
 plugins {
     kotlin("multiplatform")
-    id("com.android.library")
     id("maven-publish")
 }
 
-group = "io.adev"
-version = "0.1.0"
-
-repositories {
-    jcenter()
-    mavenCentral()
-    google()
-}
-
-android {
-    compileSdkVersion(29)
-
-    defaultConfig {
-        minSdkVersion(1)
-        targetSdkVersion(29)
-    }
-
-    compileOptions {
-        targetCompatibility = JavaVersion.VERSION_1_6
-        sourceCompatibility = JavaVersion.VERSION_1_6
-    }
-}
+group = lagerpetonGroup
+version = lagerpetonVersion
 
 kotlin {
     jvm()
-    android()
     iosArm64 {
         binaries {
             framework()
@@ -69,11 +47,6 @@ kotlin {
             dependencies {
                 implementation(kotlin("test"))
                 implementation(kotlin("test-junit"))
-            }
-        }
-        val androidMain by getting {
-            dependencies {
-                implementation(kotlin("stdlib"))
             }
         }
         val iosArm64Main by getting {
