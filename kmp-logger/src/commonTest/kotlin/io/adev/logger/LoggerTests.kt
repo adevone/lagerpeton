@@ -307,23 +307,28 @@ class LoggerTests {
         return Logger.Level.values().filter { it != level }.toTypedArray()
     }
 
-    private class MockPrinter : Logger.Printer {
+    private class MockPrinter : Logger.Printer<PrimitivesOnlyAccumulator> {
         var wasPrinted = false
         var level: Logger.Level? = null
         var owner: String? = null
         var message: String? = null
         var values: List<Any> = emptyList()
+
         override fun printLog(
             level: Logger.Level,
             owner: String?,
             message: String,
-            values: MutableMap<String, Any?>
+            accumulator: PrimitivesOnlyAccumulator
         ) {
             this.wasPrinted = true
             this.level = level
             this.owner = owner
             this.message = message
-            this.values = values.map { (key, value) -> key to value }
+            this.values = accumulator.values.map { (key, value) -> key to value }
+        }
+
+        override fun createAccumulator(): PrimitivesOnlyAccumulator {
+            return PrimitivesOnlyAccumulator()
         }
     }
 }

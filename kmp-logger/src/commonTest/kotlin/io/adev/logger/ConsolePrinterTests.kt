@@ -77,17 +77,20 @@ class ConsolePrinterTests {
         assertEquals("$owner: $message, $key1=$value1, $key2=$value2", printer.logMessage)
     }
 
-    private class TestPrinter : Logger.Printer {
+    private class TestPrinter : Logger.Printer<PrimitivesOnlyAccumulator> {
         var logMessage: String? = null
+
         override fun printLog(
             level: Logger.Level,
             owner: String?,
             message: String,
-            values: MutableMap<String, Any?>
+            accumulator: PrimitivesOnlyAccumulator
         ) {
-            logMessage = ConsolePrinter.Formatter.format(
-                owner, message, values
-            )
+            logMessage = ConsolePrinter.Formatter.format(owner, message, accumulator)
+        }
+
+        override fun createAccumulator(): PrimitivesOnlyAccumulator {
+            return PrimitivesOnlyAccumulator()
         }
     }
 }

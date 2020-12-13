@@ -1,52 +1,52 @@
 package io.adev.logger
 
-class Logger @PublishedApi internal constructor(
-    @PublishedApi internal val printer: Printer,
+class Logger<TAccumulator> @PublishedApi internal constructor(
+    @PublishedApi internal val printer: Printer<TAccumulator>,
     @PublishedApi internal val printMask: Int,
     @PublishedApi internal val owner: String?,
-    @PublishedApi internal val appends: Array<LoggerAppend>
+    @PublishedApi internal val appends: Array<LoggerAppend<TAccumulator>>
 ) {
-    fun info(message: String, append: LoggerAppend = {}) {
+    fun info(message: String, append: LoggerAppend<TAccumulator> = {}) {
         if (printMask and I_MASK != 0) {
-            val builder = currentBuilder()
-            append(builder)
-            printer.printLog(Level.Info, owner, message, builder.values)
+            val accumulator = currentAccumulator()
+            append(accumulator)
+            printer.printLog(Level.Info, owner, message, accumulator)
         }
     }
 
-    fun error(message: String, append: LoggerAppend = {}) {
+    fun error(message: String, append: LoggerAppend<TAccumulator> = {}) {
         if (printMask and E_MASK != 0) {
-            val builder = currentBuilder()
-            append(builder)
-            printer.printLog(Level.Error, owner, message, builder.values)
+            val accumulator = currentAccumulator()
+            append(accumulator)
+            printer.printLog(Level.Error, owner, message, accumulator)
         }
     }
 
-    fun debug(message: String, append: LoggerAppend = {}) {
+    fun debug(message: String, append: LoggerAppend<TAccumulator> = {}) {
         if (printMask and D_MASK != 0) {
-            val builder = currentBuilder()
-            append(builder)
-            printer.printLog(Level.Debug, owner, message, builder.values)
+            val accumulator = currentAccumulator()
+            append(accumulator)
+            printer.printLog(Level.Debug, owner, message, accumulator)
         }
     }
 
-    fun warning(message: String, append: LoggerAppend = {}) {
+    fun warning(message: String, append: LoggerAppend<TAccumulator> = {}) {
         if (printMask and W_MASK != 0) {
-            val builder = currentBuilder()
-            append(builder)
-            printer.printLog(Level.Warning, owner, message, builder.values)
+            val accumulator = currentAccumulator()
+            append(accumulator)
+            printer.printLog(Level.Warning, owner, message, accumulator)
         }
     }
 
-    private fun currentBuilder(): Builder {
-        val builder = Builder()
+    private fun currentAccumulator(): TAccumulator {
+        val accumulator = printer.createAccumulator()
         appends.forEach { append ->
-            append(builder)
+            append(accumulator)
         }
-        return builder
+        return accumulator
     }
 
-    fun new(owner: String? = null, append: LoggerAppend): Logger {
+    fun new(owner: String? = null, append: LoggerAppend<TAccumulator>): Logger<TAccumulator> {
         return Logger(
             printer = printer,
             printMask = printMask,
@@ -55,48 +55,9 @@ class Logger @PublishedApi internal constructor(
         )
     }
 
-    class Builder {
-        internal val values: MutableMap<String, Any?> = mutableMapOf()
-
-        fun put(key: String, value: String) {
-            values[key] = value
-        }
-
-        fun put(key: String, value: Int) {
-            values[key] = value
-        }
-
-        fun put(key: String, value: Long) {
-            values[key] = value
-        }
-
-        fun put(key: String, value: Float) {
-            values[key] = value
-        }
-
-        fun put(key: String, value: Double) {
-            values[key] = value
-        }
-
-        fun put(key: String, value: Boolean) {
-            values[key] = value
-        }
-
-        /**
-         * Don't forget to handle this type of value in your [Printer]
-         */
-        fun putUnsafe(key: String, value: Any?) {
-            values[key] = value
-        }
-    }
-
-    interface Printer {
-        fun printLog(
-            level: Level,
-            owner: String?,
-            message: String,
-            values: MutableMap<String, Any?>
-        )
+    interface Printer<TAccumulator> {
+        fun createAccumulator(): TAccumulator
+        fun printLog(level: Level, owner: String?, message: String, accumulator: TAccumulator)
     }
 
     enum class Level {
@@ -136,15 +97,15 @@ class Logger @PublishedApi internal constructor(
         /**
          * [printMask] can be created by [Level.printMask]
          */
-        fun new(
-            printer: Printer,
+        fun <TAccumulator> new(
+            printer: Printer<TAccumulator>,
             printMask: Int = ALL_MASK,
             owner: String? = null,
-            append: LoggerAppend = {}
-        ): Logger {
+            append: LoggerAppend<TAccumulator> = {}
+        ): Logger<TAccumulator> {
             return Logger(printer, printMask, owner, arrayOf(append))
         }
     }
 }
 
-typealias LoggerAppend = (Logger.Builder) -> Unit
+typealias LoggerAppend<TAccumulator> = (TAccumulator) -> Unit
