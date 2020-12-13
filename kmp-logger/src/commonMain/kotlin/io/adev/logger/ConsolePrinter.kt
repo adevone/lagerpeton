@@ -1,6 +1,6 @@
 package io.adev.logger
 
-object ConsolePrinter : Logger.Printer<PrimitivesOnlyAccumulator> {
+object ConsolePrinter : Lager.Printer<PrimitivesOnlyAccumulator> {
 
     override fun printLog(
         level: Int,

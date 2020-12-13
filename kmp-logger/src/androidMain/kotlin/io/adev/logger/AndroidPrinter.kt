@@ -2,7 +2,7 @@ package io.adev.logger
 
 import android.util.Log
 
-object AndroidPrinter : Logger.Printer<PrimitivesOnlyAccumulator> {
+object AndroidPrinter : Lager.Printer<PrimitivesOnlyAccumulator> {
 
     override fun printLog(
         level: Int,
@@ -18,16 +18,16 @@ object AndroidPrinter : Logger.Printer<PrimitivesOnlyAccumulator> {
             ConsolePrinter.Formatter.appendParameters(accumulator, builder = this)
         }
         when (level) {
-            Logger.INFO -> {
+            Lager.INFO -> {
                 Log.i(owner ?: DEFAULT_OWNER, logMessage)
             }
-            Logger.ERROR -> {
+            Lager.ERROR -> {
                 Log.e(owner ?: DEFAULT_OWNER, logMessage)
             }
-            Logger.DEBUG -> {
+            Lager.DEBUG -> {
                 Log.d(owner ?: DEFAULT_OWNER, logMessage)
             }
-            Logger.WARNING -> {
+            Lager.WARNING -> {
                 Log.w(owner ?: DEFAULT_OWNER, logMessage)
             }
         }

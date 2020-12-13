@@ -1,4 +1,4 @@
-[Lagerpeton](https://en.wikipedia.org/wiki/Lagerpeton) is an ancient reptile lived ~236–234 million years ago. Any reference to class [Lager](https://docs.oracle.com/javase/7/docs/api/java/util/logging/Logger.html) and to language [Peton](https://www.python.org/) is purely coincidental
+[Lagerpeton](https://en.wikipedia.org/wiki/Lagerpeton) is an ancient reptile lived ~236–234 million years ago. Any reference to class [Logger](https://docs.oracle.com/javase/7/docs/api/java/util/logging/Logger.html) and to language [Peton](https://www.python.org/) is purely coincidental
 
 ## What the library for
 
@@ -7,7 +7,7 @@ Lagerpeton allows accumulation of context for logging.
 Example:
 ```kotlin
 // In App class
-val globalLogger = Logger.new(AndroidPrinter) {
+val globalLogger = Lager.new(AndroidPrinter) {
     it.put("appVersion", "1.0.0")
     it.put("platform", "Android")
 }
@@ -32,4 +32,9 @@ class SomeViewModel {
         }
     }
 }
+```
+
+Such title for [Lager](https://github.com/adevone/lagerpeton/blob/master/kmp-logger/src/commonMain/kotlin/io/adev/logger/Logger.kt) was chosen to not clash with another loggers like [java.util.logging.Logger](https://docs.oracle.com/javase/7/docs/api/java/util/logging/Logger.html). If the title annoys you can rename the logger in your project:
+```
+typealias Logger = Lager
 ```

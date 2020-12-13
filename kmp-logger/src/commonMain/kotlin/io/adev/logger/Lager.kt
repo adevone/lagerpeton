@@ -1,28 +1,28 @@
 package io.adev.logger
 
-class Logger<TAccumulator> private constructor(
+class Lager<TAccumulator> private constructor(
     private val printer: Printer<TAccumulator>,
     private val printMask: Int,
     private val owner: String?,
-    private val appends: Array<LoggerAppend<TAccumulator>>
+    private val appends: Array<AppendToAccumulator<TAccumulator>>
 ) {
-    fun info(message: String, append: LoggerAppend<TAccumulator> = {}) {
+    fun info(message: String, append: AppendToAccumulator<TAccumulator> = {}) {
         log(INFO, message, append)
     }
 
-    fun error(message: String, append: LoggerAppend<TAccumulator> = {}) {
+    fun error(message: String, append: AppendToAccumulator<TAccumulator> = {}) {
         log(ERROR, message, append)
     }
 
-    fun debug(message: String, append: LoggerAppend<TAccumulator> = {}) {
+    fun debug(message: String, append: AppendToAccumulator<TAccumulator> = {}) {
         log(DEBUG, message, append)
     }
 
-    fun warning(message: String, append: LoggerAppend<TAccumulator> = {}) {
+    fun warning(message: String, append: AppendToAccumulator<TAccumulator> = {}) {
         log(WARNING, message, append)
     }
 
-    fun log(level: Int, message: String, append: LoggerAppend<TAccumulator> = {}) {
+    fun log(level: Int, message: String, append: AppendToAccumulator<TAccumulator> = {}) {
         if (printMask and level != 0) {
             val accumulator = currentAccumulator()
             append(accumulator)
@@ -38,8 +38,8 @@ class Logger<TAccumulator> private constructor(
         return accumulator
     }
 
-    fun new(owner: String? = null, append: LoggerAppend<TAccumulator>): Logger<TAccumulator> {
-        return Logger(
+    fun new(owner: String? = null, append: AppendToAccumulator<TAccumulator>): Lager<TAccumulator> {
+        return Lager(
             printer = printer,
             printMask = printMask,
             owner = owner ?: this.owner,
@@ -61,9 +61,9 @@ class Logger<TAccumulator> private constructor(
             printer: Printer<TAccumulator>,
             printMask: Int = INFO or ERROR or DEBUG or WARNING,
             owner: String? = null,
-            append: LoggerAppend<TAccumulator> = {}
-        ): Logger<TAccumulator> {
-            return Logger(printer, printMask, owner, arrayOf(append))
+            append: AppendToAccumulator<TAccumulator> = {}
+        ): Lager<TAccumulator> {
+            return Lager(printer, printMask, owner, arrayOf(append))
         }
 
         const val INFO = 0b0001
@@ -83,4 +83,4 @@ class Logger<TAccumulator> private constructor(
     }
 }
 
-typealias LoggerAppend<TAccumulator> = (TAccumulator) -> Unit
+typealias AppendToAccumulator<TAccumulator> = (TAccumulator) -> Unit

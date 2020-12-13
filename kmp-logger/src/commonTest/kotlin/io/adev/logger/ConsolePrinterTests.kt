@@ -9,7 +9,7 @@ class ConsolePrinterTests {
     fun message() {
         val message = "testMessage"
         val printer = TestPrinter()
-        val logger = Logger.new(printer)
+        val logger = Lager.new(printer)
         logger.info(message)
         assertEquals(message, printer.logMessage)
     }
@@ -18,7 +18,7 @@ class ConsolePrinterTests {
     fun owner() {
         val owner = "testOwner"
         val printer = TestPrinter()
-        val logger = Logger.new(printer, owner = owner)
+        val logger = Lager.new(printer, owner = owner)
         logger.info("")
         assertEquals("$owner: ", printer.logMessage)
     }
@@ -29,7 +29,7 @@ class ConsolePrinterTests {
         val key = "testKey"
         val value = "testValue"
         val printer = TestPrinter()
-        val logger = Logger.new(printer)
+        val logger = Lager.new(printer)
         logger.info(message) {
             it.put(key, value)
         }
@@ -41,7 +41,7 @@ class ConsolePrinterTests {
         val owner = "testOwner"
         val message = "testMessage"
         val printer = TestPrinter()
-        val logger = Logger.new(printer, owner = owner)
+        val logger = Lager.new(printer, owner = owner)
         logger.info(message)
         assertEquals("$owner: $message", printer.logMessage)
     }
@@ -53,7 +53,7 @@ class ConsolePrinterTests {
         val key = "testKey"
         val value = "testValue"
         val printer = TestPrinter()
-        val logger = Logger.new(printer, owner = owner)
+        val logger = Lager.new(printer, owner = owner)
         logger.info(message) {
             it.put(key, value)
         }
@@ -69,7 +69,7 @@ class ConsolePrinterTests {
         val key2 = "testKey2"
         val value2 = "testValue2"
         val printer = TestPrinter()
-        val logger = Logger.new(printer, owner = owner)
+        val logger = Lager.new(printer, owner = owner)
         logger.info(message) {
             it.put(key1, value1)
             it.put(key2, value2)
@@ -77,7 +77,7 @@ class ConsolePrinterTests {
         assertEquals("$owner: $message, $key1=$value1, $key2=$value2", printer.logMessage)
     }
 
-    private class TestPrinter : Logger.Printer<PrimitivesOnlyAccumulator> {
+    private class TestPrinter : Lager.Printer<PrimitivesOnlyAccumulator> {
         var logMessage: String? = null
 
         override fun printLog(
