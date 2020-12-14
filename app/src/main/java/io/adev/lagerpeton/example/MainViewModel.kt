@@ -22,6 +22,6 @@ class MainViewModel {
         val l = logger.new {
             it.put("eventName", "runUseCaseClicked")
         }
-        someUseCase.execute(arg1 = "test", arg2 = true, l)
+        someUseCase.execute(arg1 = "test", arg2 = true, logger = l)
     }
 }
