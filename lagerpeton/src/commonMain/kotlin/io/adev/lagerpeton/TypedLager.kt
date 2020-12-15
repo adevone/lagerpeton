@@ -57,7 +57,7 @@ class TypedLager<TAccumulator> private constructor(
         }
     }
 
-    fun new(
+    fun copy(
         owner: String? = null,
         onEachLog: AppendToAccumulator<TAccumulator>? = null,
         appendToStored: AppendToAccumulator<TAccumulator>? = null
@@ -91,7 +91,7 @@ class TypedLager<TAccumulator> private constructor(
         /**
          * [printMask] can be created by [makePrintMask]
          */
-        fun <TAccumulator> new(
+        fun <TAccumulator> create(
             printer: Printer<TAccumulator>,
             printMask: Int = INFO or ERROR or DEBUG or WARNING,
             owner: String? = null,
