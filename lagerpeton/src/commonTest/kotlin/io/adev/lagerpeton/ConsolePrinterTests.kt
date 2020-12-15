@@ -90,8 +90,8 @@ class ConsolePrinterTests {
             logMessage = ConsolePrinter.Formatter.format(owner, message, accumulator)
         }
 
-        override fun createAccumulator(): PrimitivesOnlyAccumulator {
-            return PrimitivesOnlyAccumulator()
+        override fun createAccumulator(from: PrimitivesOnlyAccumulator?): PrimitivesOnlyAccumulator {
+            return PrimitivesOnlyAccumulator(from)
         }
     }
 }

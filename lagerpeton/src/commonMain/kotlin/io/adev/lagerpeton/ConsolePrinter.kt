@@ -12,8 +12,8 @@ object ConsolePrinter : TypedLager.Printer<PrimitivesOnlyAccumulator> {
         println(logMessage)
     }
 
-    override fun createAccumulator(): PrimitivesOnlyAccumulator {
-        return PrimitivesOnlyAccumulator()
+    override fun createAccumulator(from: PrimitivesOnlyAccumulator?): PrimitivesOnlyAccumulator {
+        return PrimitivesOnlyAccumulator(from)
     }
 
     object Formatter {

@@ -12,9 +12,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val sendEventButton = findViewById<Button>(R.id.sendEventButton)
-        sendEventButton.setOnClickListener {
-            viewModel.sendEventClicked()
+        val updateCounterButton = findViewById<Button>(R.id.updateCounterButton)
+        updateCounterButton.setOnClickListener {
+            viewModel.updateCounterClicked()
         }
 
         val runUseCaseButton = findViewById<Button>(R.id.runUseCaseButton)

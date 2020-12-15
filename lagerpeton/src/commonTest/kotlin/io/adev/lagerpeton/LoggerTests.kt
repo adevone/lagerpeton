@@ -171,6 +171,34 @@ class LoggerTests {
     }
 
     @Test
+    fun globalValueStored() {
+        val key = "testKey"
+        val expectedValue = "aValue"
+        var value = expectedValue
+        val printer = MockPrinter()
+        val logger = Lager.new(printer) {
+            it.put(key, value)
+        }
+        value = "notAValue"
+        logger.info("")
+        assertEquals(listOf(key to expectedValue), printer.values)
+    }
+
+    @Test
+    fun copyValueStored() {
+        val key = "testKey"
+        val expectedValue = "aValue"
+        var value = expectedValue
+        val printer = MockPrinter()
+        val logger = Lager.new(printer).new {
+            it.put(key, value)
+        }
+        value = "notAValue"
+        logger.info("")
+        assertEquals(listOf(key to expectedValue), printer.values)
+    }
+
+    @Test
     fun printInt() {
         val key = "testKey"
         val value = 123
@@ -339,8 +367,8 @@ class LoggerTests {
             this.values = accumulator.values.map { (key, value) -> key to value }
         }
 
-        override fun createAccumulator(): PrimitivesOnlyAccumulator {
-            return PrimitivesOnlyAccumulator()
+        override fun createAccumulator(from: PrimitivesOnlyAccumulator?): PrimitivesOnlyAccumulator {
+            return PrimitivesOnlyAccumulator(from)
         }
     }
 }

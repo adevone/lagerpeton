@@ -3,17 +3,20 @@ package io.adev.lagerpeton.example
 class MainViewModel {
     private val someUseCase = SomeUseCase()
 
-    private var isSwitched: Boolean = false
+    private var counter: Int = 0
 
     private val logger = ServicesLocator.globalLogger.new(
-        owner = MainViewModel::class.java.simpleName
+        owner = MainViewModel::class.java.simpleName,
+        onEachLog = {
+            it.put("countReactive", counter)
+        }
     ) {
-        it.put("isSwitched", isSwitched)
+        it.put("countStored", counter)
     }
 
-    fun sendEventClicked() {
-        isSwitched = !isSwitched
-        logger.info("isSwitched is switched") {
+    fun updateCounterClicked() {
+        counter += 1
+        logger.info("counter updated") {
             it.put("on", "event sent")
         }
     }
