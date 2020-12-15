@@ -7,29 +7,52 @@ class TypedLager<TAccumulator> private constructor(
     private val onEachLogAppends: Array<AppendToAccumulator<TAccumulator>>?,
     private val storedAccumulator: TAccumulator?
 ) {
-    fun info(message: String, append: AppendToAccumulator<TAccumulator> = {}) {
-        log(INFO, message, append)
+    fun info(
+        message: String,
+        owner: String? = this.owner,
+        append: AppendToAccumulator<TAccumulator>? = null
+    ) {
+        log(INFO, message, owner, append)
     }
 
-    fun error(message: String, append: AppendToAccumulator<TAccumulator> = {}) {
-        log(ERROR, message, append)
+    fun error(
+        message: String,
+        owner: String? = this.owner,
+        append: AppendToAccumulator<TAccumulator>? = null
+    ) {
+        log(ERROR, message, owner, append)
     }
 
-    fun debug(message: String, append: AppendToAccumulator<TAccumulator> = {}) {
-        log(DEBUG, message, append)
+    fun debug(
+        message: String,
+        owner: String? = this.owner,
+        append: AppendToAccumulator<TAccumulator>? = null
+    ) {
+        log(DEBUG, message, owner, append)
     }
 
-    fun warning(message: String, append: AppendToAccumulator<TAccumulator> = {}) {
-        log(WARNING, message, append)
+    fun warning(
+        message: String,
+        owner: String? = this.owner,
+        append: AppendToAccumulator<TAccumulator>? = null
+    ) {
+        log(WARNING, message, owner, append)
     }
 
-    fun log(level: Int, message: String, append: AppendToAccumulator<TAccumulator> = {}) {
+    fun log(
+        level: Int,
+        message: String,
+        owner: String? = this.owner,
+        append: AppendToAccumulator<TAccumulator>? = null
+    ) {
         if (printMask and level != 0) {
             val accumulator = printer.createAccumulator(from = storedAccumulator)
             onEachLogAppends?.forEach { thisAppend ->
                 thisAppend(accumulator)
             }
-            append(accumulator)
+            if (append != null) {
+                append(accumulator)
+            }
             printer.printLog(level, owner, message, accumulator)
         }
     }
