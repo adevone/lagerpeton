@@ -69,9 +69,9 @@ class ConsolePrinterTests {
         val key2 = "testKey2"
         val value2 = "testValue2"
         val printer = TestPrinter()
-        val logger = Lager.new(printer, owner = owner).new {
+        val logger = Lager.new(printer, owner = owner).new(onEachLog = {
             it.put(key2, value2)
-        }
+        })
         logger.info(message) {
             it.put(key1, value1)
         }

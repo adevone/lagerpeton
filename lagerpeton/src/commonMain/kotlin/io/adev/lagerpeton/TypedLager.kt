@@ -3,8 +3,8 @@ package io.adev.lagerpeton
 class TypedLager<TAccumulator> private constructor(
     private val printer: Printer<TAccumulator>,
     private val printMask: Int,
-    private val owner: String?,
-    private val appends: Array<AppendToAccumulator<TAccumulator>>
+    private val onEachLogAppends: Array<AppendToAccumulator<TAccumulator>>?,
+    private val owner: String?
 ) {
     fun info(message: String, append: AppendToAccumulator<TAccumulator> = {}) {
         log(INFO, message, append)
@@ -24,29 +24,28 @@ class TypedLager<TAccumulator> private constructor(
 
     fun log(level: Int, message: String, append: AppendToAccumulator<TAccumulator> = {}) {
         if (printMask and level != 0) {
-            val accumulator = currentAccumulator()
+            val accumulator = printer.createAccumulator()
+            onEachLogAppends?.forEach { thisAppend ->
+                thisAppend(accumulator)
+            }
             append(accumulator)
             printer.printLog(level, owner, message, accumulator)
         }
     }
 
-    private fun currentAccumulator(): TAccumulator {
-        val accumulator = printer.createAccumulator()
-        appends.forEach { append ->
-            append(accumulator)
-        }
-        return accumulator
-    }
-
     fun new(
-        owner: String? = null,
-        append: AppendToAccumulator<TAccumulator>
+        onEachLog: AppendToAccumulator<TAccumulator>?,
+        owner: String? = null
     ): TypedLager<TAccumulator> {
         return TypedLager(
             printer = printer,
             printMask = printMask,
             owner = owner ?: this.owner,
-            appends = appends + append
+            onEachLogAppends = if (onEachLog != null) {
+                (this.onEachLogAppends ?: emptyArray()) + onEachLog
+            } else {
+                this.onEachLogAppends
+            }
         )
     }
 
@@ -63,10 +62,15 @@ class TypedLager<TAccumulator> private constructor(
         fun <TAccumulator> new(
             printer: Printer<TAccumulator>,
             printMask: Int = INFO or ERROR or DEBUG or WARNING,
-            owner: String? = null,
-            append: AppendToAccumulator<TAccumulator> = {}
+            onEachLog: AppendToAccumulator<TAccumulator>? = null,
+            owner: String? = null
         ): TypedLager<TAccumulator> {
-            return TypedLager(printer, printMask, owner, arrayOf(append))
+            return TypedLager(
+                printer,
+                printMask,
+                onEachLogAppends = onEachLog?.let { arrayOf(it) },
+                owner
+            )
         }
 
         // @formatter:off

@@ -32,9 +32,9 @@ class LoggerTests {
         val key = "testKey"
         val value = "test"
         val printer = MockPrinter()
-        val logger = Lager.new(printer) {
+        val logger = Lager.new(printer, onEachLog = {
             it.put(key, value)
-        }
+        })
         logger.info("")
         assertEquals(listOf(key to value), printer.values)
     }
@@ -45,9 +45,9 @@ class LoggerTests {
         val value = "test"
         val printer = MockPrinter()
         val globalLogger = Lager.new(printer)
-        val logger = globalLogger.new {
+        val logger = globalLogger.new(onEachLog = {
             it.put(key, value)
-        }
+        })
         logger.info("")
         assertEquals(listOf(key to value), printer.values)
     }
@@ -57,11 +57,11 @@ class LoggerTests {
         val key = "testKey"
         val value = "test"
         val printer = MockPrinter()
-        val logger = Lager.new(printer) {
+        val logger = Lager.new(printer, onEachLog = {
             it.put(key, "notTest")
-        }.new {
+        }).new(onEachLog = {
             it.put(key, value)
-        }
+        })
         logger.info("")
         assertEquals(listOf(key to value), printer.values)
     }
@@ -71,9 +71,9 @@ class LoggerTests {
         val key = "testKey"
         val value = "test"
         val printer = MockPrinter()
-        val logger = Lager.new(printer) {
+        val logger = Lager.new(printer, onEachLog = {
             it.put(key, "notTest")
-        }
+        })
         logger.info("") {
             it.put(key, value)
         }
@@ -85,11 +85,11 @@ class LoggerTests {
         val key = "testKey"
         val value = "test"
         val printer = MockPrinter()
-        val logger = Lager.new(printer) {
+        val logger = Lager.new(printer, onEachLog = {
             it.put(key, "notTest")
-        }.new {
+        }).new(onEachLog = {
             it.put(key, "notTest2")
-        }
+        })
         logger.info("") {
             it.put(key, value)
         }
@@ -105,11 +105,11 @@ class LoggerTests {
         val key3 = "testKey3"
         val value3 = "test3"
         val printer = MockPrinter()
-        val logger = Lager.new(printer) {
+        val logger = Lager.new(printer, onEachLog = {
             it.put(key1, value1)
-        }.new {
+        }).new(onEachLog = {
             it.put(key2, value2)
-        }
+        })
         logger.info("") {
             it.put(key3, value3)
         }
@@ -128,12 +128,15 @@ class LoggerTests {
         val printer = MockPrinter()
         val logger = Lager.new(
             printer,
-            printMask = Lager.makePrintMask(Lager.ERROR)
-        ) {
-            throw IllegalStateException("global append must not me called")
-        }.new {
-            throw IllegalStateException("copy append must not me called")
-        }
+            printMask = Lager.makePrintMask(Lager.ERROR),
+            onEachLog = {
+                throw IllegalStateException("global append must not me called")
+            }
+        ).new(
+            onEachLog = {
+                throw IllegalStateException("copy append must not me called")
+            }
+        )
         logger.info("") {
             throw IllegalStateException("message append must not me called")
         }
@@ -145,9 +148,9 @@ class LoggerTests {
         var value = "notAValue"
         val expectedValue = "aValue"
         val printer = MockPrinter()
-        val logger = Lager.new(printer) {
+        val logger = Lager.new(printer, onEachLog = {
             it.put(key, value)
-        }
+        })
         value = expectedValue
         logger.info("")
         assertEquals(listOf(key to expectedValue), printer.values)
@@ -159,9 +162,9 @@ class LoggerTests {
         var value = "notAValue"
         val expectedValue = "aValue"
         val printer = MockPrinter()
-        val logger = Lager.new(printer).new {
+        val logger = Lager.new(printer).new(onEachLog = {
             it.put(key, value)
-        }
+        })
         value = expectedValue
         logger.info("")
         assertEquals(listOf(key to expectedValue), printer.values)
