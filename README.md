@@ -1,24 +1,6 @@
 [Lagerpeton](https://en.wikipedia.org/wiki/Lagerpeton) is an ancient ornithodira lived ~236–234 million years ago. Any reference to class [Lager](https://docs.oracle.com/javase/7/docs/api/java/util/logging/Logger.html) and to language [Peton](https://www.python.org/) is purely coincidental
 
-## Dependency
-
-```kotlin
-// in root build.gradle
-allprojects {
-    repositories {
-        // ...
-        maven { url = uri("https://dl.bintray.com/summermpp/summer") }
-    }
-}
-
-// in module build.gradle
-dependencies {
-    implementation("io.adev:lagerpeton:0.1.7")
-    
-    // for android projects
-    implementation("io.adev:lagerpeton-android:0.1.7")
-}
-```
+[![logo](./logo.png)]
 
 ## What the library for
 
@@ -57,6 +39,26 @@ class SomeViewModel {
             it.put("arg2", arg2)
         }
     }
+}
+```
+
+## Dependency
+
+```kotlin
+// in root build.gradle
+allprojects {
+    repositories {
+        // ...
+        maven { url = uri("https://dl.bintray.com/summermpp/summer") }
+    }
+}
+
+// in module build.gradle
+dependencies {
+    implementation("io.adev:lagerpeton:0.1.7")
+    
+    // for android projects
+    implementation("io.adev:lagerpeton-android:0.1.7")
 }
 ```
 
