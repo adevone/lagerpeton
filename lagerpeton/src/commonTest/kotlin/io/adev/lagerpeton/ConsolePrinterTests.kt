@@ -9,7 +9,7 @@ class ConsolePrinterTests {
     fun message() {
         val message = "testMessage"
         val printer = TestPrinter()
-        val logger = Lager.create(printer)
+        val logger = Lager.create(printer, PrimitivesOnlyAccumulator)
         logger.info(message)
         assertEquals(message, printer.logMessage)
     }
@@ -18,7 +18,7 @@ class ConsolePrinterTests {
     fun owner() {
         val owner = "testOwner"
         val printer = TestPrinter()
-        val logger = Lager.create(printer, owner = owner)
+        val logger = Lager.create(printer, PrimitivesOnlyAccumulator, owner = owner)
         logger.info("")
         assertEquals("$owner: ", printer.logMessage)
     }
@@ -29,7 +29,7 @@ class ConsolePrinterTests {
         val key = "testKey"
         val value = "testValue"
         val printer = TestPrinter()
-        val logger = Lager.create(printer)
+        val logger = Lager.create(printer, PrimitivesOnlyAccumulator)
         logger.info(message) {
             it.put(key, value)
         }
@@ -41,7 +41,7 @@ class ConsolePrinterTests {
         val owner = "testOwner"
         val message = "testMessage"
         val printer = TestPrinter()
-        val logger = Lager.create(printer, owner = owner)
+        val logger = Lager.create(printer, PrimitivesOnlyAccumulator, owner = owner)
         logger.info(message)
         assertEquals("$owner: $message", printer.logMessage)
     }
@@ -53,7 +53,7 @@ class ConsolePrinterTests {
         val key = "testKey"
         val value = "testValue"
         val printer = TestPrinter()
-        val logger = Lager.create(printer, owner = owner)
+        val logger = Lager.create(printer, PrimitivesOnlyAccumulator, owner = owner)
         logger.info(message) {
             it.put(key, value)
         }
@@ -69,9 +69,10 @@ class ConsolePrinterTests {
         val key2 = "testKey2"
         val value2 = "testValue2"
         val printer = TestPrinter()
-        val logger = Lager.create(printer, owner = owner).copy(onEachLog = {
-            it.put(key2, value2)
-        })
+        val logger = Lager.create(printer, PrimitivesOnlyAccumulator, owner = owner)
+            .copy(onEachLog = {
+                it.put(key2, value2)
+            })
         logger.info(message) {
             it.put(key1, value1)
         }
@@ -88,10 +89,6 @@ class ConsolePrinterTests {
             accumulator: PrimitivesOnlyAccumulator
         ) {
             logMessage = ConsolePrinter.Formatter.format(owner, message, accumulator)
-        }
-
-        override fun createAccumulator(from: PrimitivesOnlyAccumulator?): PrimitivesOnlyAccumulator {
-            return PrimitivesOnlyAccumulator(from)
         }
     }
 }

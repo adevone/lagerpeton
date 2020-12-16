@@ -5,7 +5,7 @@ class MainViewModel {
 
     private var counter: Int = 0
 
-    private val logger = ServicesLocator.globalLogger.new(
+    private val logger = ServicesLocator.globalLogger.copy(
         owner = MainViewModel::class.java.simpleName,
         onEachLog = {
             it.put("countReactive", counter)
@@ -22,7 +22,7 @@ class MainViewModel {
     }
 
     fun runUseCaseClicked() {
-        val l = logger.new {
+        val l = logger.copy {
             it.put("eventName", "runUseCaseClicked")
         }
         someUseCase.execute(arg1 = "test", arg2 = true, logger = l)

@@ -1,13 +1,7 @@
 package io.adev.lagerpeton
 
-class PrimitivesOnlyAccumulator(from: PrimitivesOnlyAccumulator?) {
+class PrimitivesOnlyAccumulator private constructor() {
     val values: MutableMap<String, Any> = mutableMapOf()
-
-    init {
-        if (from != null) {
-            values.putAll(from.values)
-        }
-    }
 
     fun put(key: String, value: String) {
         values[key] = value
@@ -31,5 +25,15 @@ class PrimitivesOnlyAccumulator(from: PrimitivesOnlyAccumulator?) {
 
     fun put(key: String, value: Boolean) {
         values[key] = value
+    }
+
+    companion object : TypedLager.AccumulatorFactory<PrimitivesOnlyAccumulator> {
+        override fun createAccumulator(from: PrimitivesOnlyAccumulator?): PrimitivesOnlyAccumulator {
+            val accumulator = PrimitivesOnlyAccumulator()
+            if (from != null) {
+                accumulator.values.putAll(from.values)
+            }
+            return accumulator
+        }
     }
 }

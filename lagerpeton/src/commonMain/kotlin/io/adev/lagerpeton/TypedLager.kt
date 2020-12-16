@@ -2,6 +2,7 @@ package io.adev.lagerpeton
 
 class TypedLager<TAccumulator> private constructor(
     private val printer: Printer<TAccumulator>,
+    private val accumulatorFactory: AccumulatorFactory<TAccumulator>,
     private val printMask: Int,
     private val owner: String?,
     private val onEachLogAppends: Array<AppendToAccumulator<TAccumulator>>?,
@@ -46,7 +47,7 @@ class TypedLager<TAccumulator> private constructor(
         append: AppendToAccumulator<TAccumulator>? = null
     ) {
         if (printMask and level != 0) {
-            val accumulator = printer.createAccumulator(from = storedAccumulator)
+            val accumulator = accumulatorFactory.createAccumulator(from = storedAccumulator)
             onEachLogAppends?.forEach { thisAppend ->
                 thisAppend(accumulator)
             }
@@ -63,8 +64,9 @@ class TypedLager<TAccumulator> private constructor(
         appendToStored: AppendToAccumulator<TAccumulator>? = null
     ): TypedLager<TAccumulator> {
         return TypedLager(
-            printer = printer,
-            printMask = printMask,
+            printer,
+            accumulatorFactory,
+            printMask,
             owner = owner ?: this.owner,
             onEachLogAppends = if (onEachLog != null) {
                 (this.onEachLogAppends ?: emptyArray()) + onEachLog
@@ -72,7 +74,7 @@ class TypedLager<TAccumulator> private constructor(
                 this.onEachLogAppends
             },
             storedAccumulator = if (appendToStored != null) {
-                val accumulator = printer.createAccumulator(from = storedAccumulator)
+                val accumulator = accumulatorFactory.createAccumulator(from = storedAccumulator)
                 appendToStored(accumulator)
                 accumulator
             } else {
@@ -81,9 +83,12 @@ class TypedLager<TAccumulator> private constructor(
         )
     }
 
-    interface Printer<TAccumulator> {
-        fun createAccumulator(from: TAccumulator?): TAccumulator
+    fun interface Printer<TAccumulator> {
         fun printLog(level: Int, owner: String?, message: String, accumulator: TAccumulator)
+    }
+
+    interface AccumulatorFactory<TAccumulator> {
+        fun createAccumulator(from: TAccumulator?): TAccumulator
     }
 
     companion object {
@@ -93,6 +98,7 @@ class TypedLager<TAccumulator> private constructor(
          */
         fun <TAccumulator> create(
             printer: Printer<TAccumulator>,
+            accumulatorFactory: AccumulatorFactory<TAccumulator>,
             printMask: Int = INFO or ERROR or DEBUG or WARNING,
             owner: String? = null,
             onEachLog: AppendToAccumulator<TAccumulator>? = null,
@@ -100,11 +106,12 @@ class TypedLager<TAccumulator> private constructor(
         ): TypedLager<TAccumulator> {
             return TypedLager(
                 printer,
+                accumulatorFactory,
                 printMask,
                 owner,
                 onEachLogAppends = onEachLog?.let { arrayOf(it) },
                 storedAccumulator = if (makeStored != null) {
-                    val accumulator = printer.createAccumulator(from = null)
+                    val accumulator = accumulatorFactory.createAccumulator(from = null)
                     makeStored(accumulator)
                     accumulator
                 } else {

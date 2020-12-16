@@ -33,9 +33,5 @@ object AndroidPrinter : TypedLager.Printer<PrimitivesOnlyAccumulator> {
         }
     }
 
-    override fun createAccumulator(from: PrimitivesOnlyAccumulator?): PrimitivesOnlyAccumulator {
-        return PrimitivesOnlyAccumulator(from)
-    }
-
     private const val DEFAULT_OWNER = "AndroidPrinter"
 }
