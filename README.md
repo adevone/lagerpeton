@@ -1,6 +1,7 @@
 [Lagerpeton](https://en.wikipedia.org/wiki/Lagerpeton) is an ancient ornithodira lived ~236–234 million years ago. Any reference to class [Lager](https://docs.oracle.com/javase/7/docs/api/java/util/logging/Logger.html) and to language [Peton](https://www.python.org/) is purely coincidental
 
-![logo](./logo.png)
+![logo](./logo.png)  
+[Original](https://thecomicninja.wordpress.com/2011/11/27/xkcd-37/)
 
 ## What the library for
 
