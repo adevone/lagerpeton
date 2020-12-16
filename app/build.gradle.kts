@@ -38,6 +38,8 @@ dependencies {
 
     implementation("io.adev:lagerpeton:$lagerpetonVersion")
     implementation("io.adev:lagerpeton-android:$lagerpetonVersion")
+//    implementation(project(":lagerpeton"))
+//    implementation(project(":lagerpeton-android"))
 
     implementation("androidx.appcompat:appcompat:1.2.0")
     implementation("androidx.core:core-ktx:1.3.2")

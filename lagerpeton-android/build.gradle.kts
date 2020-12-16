@@ -30,6 +30,7 @@ android {
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     implementation("io.adev:lagerpeton:$lagerpetonVersion")
+//    implementation(project(":lagerpeton"))
 }
 
 val sourceJar by tasks.registering(Jar::class) {

@@ -2,11 +2,9 @@ import java.util.*
 
 plugins {
     kotlin("multiplatform")
+    id("kotlinx-serialization")
     id("maven-publish")
 }
-
-group = lagerpetonGroup
-version = lagerpetonVersion
 
 kotlin {
     jvm()
@@ -29,7 +27,10 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(kotlin("stdlib-common"))
+                implementation(kotlin("stdlib"))
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
+                implementation("io.adev:lagerpeton:$lagerpetonVersion")
+//                implementation(project(":lagerpeton"))
             }
         }
         val commonTest by getting {
@@ -40,7 +41,6 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
-                implementation(kotlin("stdlib"))
             }
         }
         val jvmTest by getting {
@@ -49,15 +49,17 @@ kotlin {
                 implementation(kotlin("test-junit"))
             }
         }
-        val iosArm64Main by getting {
+        getByName("iosArm64Main") {
             dependencies {
-
             }
         }
-        getByName("iosX64Main").dependsOn(getByName("iosArm64Main"))
         getByName("iosArm32Main").dependsOn(getByName("iosArm64Main"))
+        getByName("iosX64Main").dependsOn(getByName("iosArm64Main"))
     }
 }
+
+group = lagerpetonGroup
+version = lagerpetonVersion
 
 val propsFile = File(rootProject.rootDir, "bintray.properties")
 if (propsFile.exists()) {
@@ -66,7 +68,7 @@ if (propsFile.exists()) {
             load(propsFile.inputStream())
         }
         repositories {
-            maven("https://api.bintray.com/maven/summermpp/summer/lagerpeton/;publish=0;override=1") {
+            maven("https://api.bintray.com/maven/summermpp/summer/summer/;publish=0;override=1") {
                 name = "bintray"
 
                 credentials {
