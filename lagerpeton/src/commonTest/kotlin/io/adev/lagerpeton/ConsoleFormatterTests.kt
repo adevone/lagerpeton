@@ -3,7 +3,7 @@ package io.adev.lagerpeton
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ConsolePrinterTests {
+class ConsoleFormatterTests {
 
     @Test
     fun message() {
