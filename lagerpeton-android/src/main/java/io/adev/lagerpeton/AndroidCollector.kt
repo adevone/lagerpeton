@@ -2,7 +2,7 @@ package io.adev.lagerpeton
 
 import android.util.Log
 
-object AndroidPrinter : TypedLager.Printer<PrimitivesOnlyAccumulator> {
+object AndroidCollector : TypedLager.Collector<PrimitivesOnlyAccumulator> {
 
     override fun printLog(
         level: Int,
@@ -15,7 +15,7 @@ object AndroidPrinter : TypedLager.Printer<PrimitivesOnlyAccumulator> {
             if (accumulator.values.isNotEmpty()) {
                 append(", ")
             }
-            ConsolePrinter.Formatter.appendParameters(accumulator, builder = this)
+            ConsoleCollector.Formatter.appendParameters(accumulator, builder = this)
         }
         when (level) {
             Lager.INFO -> {
@@ -43,8 +43,8 @@ fun TypedLager.Companion.android(
     makeStored: AppendToAccumulator<PrimitivesOnlyAccumulator>? = null
 ): TypedLager<PrimitivesOnlyAccumulator> {
     return create(
-        AndroidPrinter,
-        PrimitivesOnlyAccumulator,
+        collector = AndroidCollector,
+        accumulatorFactory = PrimitivesOnlyAccumulator,
         printMask,
         owner,
         onEachLog,

@@ -1,7 +1,7 @@
 package io.adev.lagerpeton
 
 class TypedLager<TAccumulator> private constructor(
-    private val printer: Printer<TAccumulator>,
+    private val collector: Collector<TAccumulator>,
     private val accumulatorFactory: AccumulatorFactory<TAccumulator>,
     private val printMask: Int,
     private val owner: String?,
@@ -54,7 +54,7 @@ class TypedLager<TAccumulator> private constructor(
             if (append != null) {
                 append(accumulator)
             }
-            printer.printLog(level, owner, message, accumulator)
+            collector.printLog(level, owner, message, accumulator)
         }
     }
 
@@ -64,7 +64,7 @@ class TypedLager<TAccumulator> private constructor(
         appendToStored: AppendToAccumulator<TAccumulator>? = null
     ): TypedLager<TAccumulator> {
         return TypedLager(
-            printer,
+            collector,
             accumulatorFactory,
             printMask,
             owner = owner ?: this.owner,
@@ -83,7 +83,7 @@ class TypedLager<TAccumulator> private constructor(
         )
     }
 
-    fun interface Printer<TAccumulator> {
+    fun interface Collector<TAccumulator> {
         fun printLog(level: Int, owner: String?, message: String, accumulator: TAccumulator)
     }
 
@@ -97,7 +97,7 @@ class TypedLager<TAccumulator> private constructor(
          * [printMask] can be created by [makePrintMask]
          */
         fun <TAccumulator> create(
-            printer: Printer<TAccumulator>,
+            collector: Collector<TAccumulator>,
             accumulatorFactory: AccumulatorFactory<TAccumulator>,
             printMask: Int = INFO or ERROR or DEBUG or WARNING,
             owner: String? = null,
@@ -105,7 +105,7 @@ class TypedLager<TAccumulator> private constructor(
             makeStored: AppendToAccumulator<TAccumulator>? = null
         ): TypedLager<TAccumulator> {
             return TypedLager(
-                printer,
+                collector,
                 accumulatorFactory,
                 printMask,
                 owner,

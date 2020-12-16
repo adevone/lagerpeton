@@ -1,6 +1,6 @@
 package io.adev.lagerpeton
 
-object ConsolePrinter : TypedLager.Printer<PrimitivesOnlyAccumulator> {
+object ConsoleCollector : TypedLager.Collector<PrimitivesOnlyAccumulator> {
 
     override fun printLog(
         level: Int,
@@ -62,8 +62,8 @@ fun TypedLager.Companion.console(
     makeStored: AppendToAccumulator<PrimitivesOnlyAccumulator>? = null
 ): TypedLager<PrimitivesOnlyAccumulator> {
     return create(
-        ConsolePrinter,
-        PrimitivesOnlyAccumulator,
+        collector = ConsoleCollector,
+        accumulatorFactory = PrimitivesOnlyAccumulator,
         printMask,
         owner,
         onEachLog,

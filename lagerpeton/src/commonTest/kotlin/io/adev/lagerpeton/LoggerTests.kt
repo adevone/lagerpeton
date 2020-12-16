@@ -9,56 +9,56 @@ class LoggerTests {
     @Test
     fun message() {
         val message = "test"
-        val printer = MockPrinter()
-        val logger = Lager.create(printer, PrimitivesOnlyAccumulator)
+        val collector = MockCollector()
+        val logger = Lager.create(collector, PrimitivesOnlyAccumulator)
         logger.info(message)
-        assertEquals(message, printer.message)
+        assertEquals(message, collector.message)
     }
 
     @Test
     fun printValue() {
         val key = "testKey"
         val value = "test"
-        val printer = MockPrinter()
-        val logger = Lager.create(printer, PrimitivesOnlyAccumulator)
+        val collector = MockCollector()
+        val logger = Lager.create(collector, PrimitivesOnlyAccumulator)
         logger.info("") {
             it.put(key, value)
         }
-        assertEquals(listOf(key to value), printer.values)
+        assertEquals(listOf(key to value), collector.values)
     }
 
     @Test
     fun globalValue() {
         val key = "testKey"
         val value = "test"
-        val printer = MockPrinter()
-        val logger = Lager.create(printer, PrimitivesOnlyAccumulator,
+        val collector = MockCollector()
+        val logger = Lager.create(collector, PrimitivesOnlyAccumulator,
             onEachLog = {
                 it.put(key, value)
             })
         logger.info("")
-        assertEquals(listOf(key to value), printer.values)
+        assertEquals(listOf(key to value), collector.values)
     }
 
     @Test
     fun copyValue() {
         val key = "testKey"
         val value = "test"
-        val printer = MockPrinter()
-        val globalLogger = Lager.create(printer, PrimitivesOnlyAccumulator)
+        val collector = MockCollector()
+        val globalLogger = Lager.create(collector, PrimitivesOnlyAccumulator)
         val logger = globalLogger.copy(onEachLog = {
             it.put(key, value)
         })
         logger.info("")
-        assertEquals(listOf(key to value), printer.values)
+        assertEquals(listOf(key to value), collector.values)
     }
 
     @Test
     fun overrideGlobalInCopy() {
         val key = "testKey"
         val value = "test"
-        val printer = MockPrinter()
-        val logger = Lager.create(printer, PrimitivesOnlyAccumulator,
+        val collector = MockCollector()
+        val logger = Lager.create(collector, PrimitivesOnlyAccumulator,
             onEachLog = {
                 it.put(key, "notTest")
             }
@@ -68,30 +68,30 @@ class LoggerTests {
             }
         )
         logger.info("")
-        assertEquals(listOf(key to value), printer.values)
+        assertEquals(listOf(key to value), collector.values)
     }
 
     @Test
     fun overrideGlobalOnPrint() {
         val key = "testKey"
         val value = "test"
-        val printer = MockPrinter()
-        val logger = Lager.create(printer, PrimitivesOnlyAccumulator,
+        val collector = MockCollector()
+        val logger = Lager.create(collector, PrimitivesOnlyAccumulator,
             onEachLog = {
                 it.put(key, "notTest")
             })
         logger.info("") {
             it.put(key, value)
         }
-        assertEquals(listOf(key to value), printer.values)
+        assertEquals(listOf(key to value), collector.values)
     }
 
     @Test
     fun overrideCopyOnPrint() {
         val key = "testKey"
         val value = "test"
-        val printer = MockPrinter()
-        val logger = Lager.create(printer, PrimitivesOnlyAccumulator,
+        val collector = MockCollector()
+        val logger = Lager.create(collector, PrimitivesOnlyAccumulator,
             onEachLog = {
                 it.put(key, "notTest")
             }
@@ -103,7 +103,7 @@ class LoggerTests {
         logger.info("") {
             it.put(key, value)
         }
-        assertEquals(listOf(key to value), printer.values)
+        assertEquals(listOf(key to value), collector.values)
     }
 
     @Test
@@ -114,8 +114,8 @@ class LoggerTests {
         val value2 = "test2"
         val key3 = "testKey3"
         val value3 = "test3"
-        val printer = MockPrinter()
-        val logger = Lager.create(printer, PrimitivesOnlyAccumulator,
+        val collector = MockCollector()
+        val logger = Lager.create(collector, PrimitivesOnlyAccumulator,
             onEachLog = {
                 it.put(key1, value1)
             }
@@ -133,15 +133,15 @@ class LoggerTests {
                 key2 to value2,
                 key3 to value3
             ),
-            printer.values
+            collector.values
         )
     }
 
     @Test
     fun lazy() {
-        val printer = MockPrinter()
+        val collector = MockCollector()
         val logger = Lager.create(
-            printer, PrimitivesOnlyAccumulator,
+            collector, PrimitivesOnlyAccumulator,
             printMask = Lager.makePrintMask(Lager.ERROR),
             onEachLog = {
                 throw IllegalStateException("global append must not me called")
@@ -161,14 +161,14 @@ class LoggerTests {
         val key = "testKey"
         var value = "notAValue"
         val expectedValue = "aValue"
-        val printer = MockPrinter()
-        val logger = Lager.create(printer, PrimitivesOnlyAccumulator,
+        val collector = MockCollector()
+        val logger = Lager.create(collector, PrimitivesOnlyAccumulator,
             onEachLog = {
                 it.put(key, value)
             })
         value = expectedValue
         logger.info("")
-        assertEquals(listOf(key to expectedValue), printer.values)
+        assertEquals(listOf(key to expectedValue), collector.values)
     }
 
     @Test
@@ -176,14 +176,14 @@ class LoggerTests {
         val key = "testKey"
         var value = "notAValue"
         val expectedValue = "aValue"
-        val printer = MockPrinter()
-        val logger = Lager.create(printer, PrimitivesOnlyAccumulator)
+        val collector = MockCollector()
+        val logger = Lager.create(collector, PrimitivesOnlyAccumulator)
             .copy(onEachLog = {
                 it.put(key, value)
             })
         value = expectedValue
         logger.info("")
-        assertEquals(listOf(key to expectedValue), printer.values)
+        assertEquals(listOf(key to expectedValue), collector.values)
     }
 
     @Test
@@ -191,13 +191,13 @@ class LoggerTests {
         val key = "testKey"
         val expectedValue = "aValue"
         var value = expectedValue
-        val printer = MockPrinter()
-        val logger = Lager.create(printer, PrimitivesOnlyAccumulator) {
+        val collector = MockCollector()
+        val logger = Lager.create(collector, PrimitivesOnlyAccumulator) {
             it.put(key, value)
         }
         value = "notAValue"
         logger.info("")
-        assertEquals(listOf(key to expectedValue), printer.values)
+        assertEquals(listOf(key to expectedValue), collector.values)
     }
 
     @Test
@@ -205,168 +205,168 @@ class LoggerTests {
         val key = "testKey"
         val expectedValue = "aValue"
         var value = expectedValue
-        val printer = MockPrinter()
-        val logger = Lager.create(printer, PrimitivesOnlyAccumulator).copy {
+        val collector = MockCollector()
+        val logger = Lager.create(collector, PrimitivesOnlyAccumulator).copy {
             it.put(key, value)
         }
         value = "notAValue"
         logger.info("")
-        assertEquals(listOf(key to expectedValue), printer.values)
+        assertEquals(listOf(key to expectedValue), collector.values)
     }
 
     @Test
     fun printInt() {
         val key = "testKey"
         val value = 123
-        val printer = MockPrinter()
-        val logger = Lager.create(printer, PrimitivesOnlyAccumulator)
+        val collector = MockCollector()
+        val logger = Lager.create(collector, PrimitivesOnlyAccumulator)
         logger.info("") {
             it.put(key, value)
         }
-        assertEquals(listOf(key to value), printer.values)
+        assertEquals(listOf(key to value), collector.values)
     }
 
     @Test
     fun printLong() {
         val key = "testKey"
         val value = 123L
-        val printer = MockPrinter()
-        val logger = Lager.create(printer, PrimitivesOnlyAccumulator)
+        val collector = MockCollector()
+        val logger = Lager.create(collector, PrimitivesOnlyAccumulator)
         logger.info("") {
             it.put(key, value)
         }
-        assertEquals(listOf(key to value), printer.values)
+        assertEquals(listOf(key to value), collector.values)
     }
 
     @Test
     fun printFloat() {
         val key = "testKey"
         val value = 123f
-        val printer = MockPrinter()
-        val logger = Lager.create(printer, PrimitivesOnlyAccumulator)
+        val collector = MockCollector()
+        val logger = Lager.create(collector, PrimitivesOnlyAccumulator)
         logger.info("") {
             it.put(key, value)
         }
-        assertEquals(listOf(key to value), printer.values)
+        assertEquals(listOf(key to value), collector.values)
     }
 
     @Test
     fun printDouble() {
         val key = "testKey"
         val value = 123.0
-        val printer = MockPrinter()
-        val logger = Lager.create(printer, PrimitivesOnlyAccumulator)
+        val collector = MockCollector()
+        val logger = Lager.create(collector, PrimitivesOnlyAccumulator)
         logger.info("") {
             it.put(key, value)
         }
-        assertEquals(listOf(key to value), printer.values)
+        assertEquals(listOf(key to value), collector.values)
     }
 
     @Test
     fun printBoolean() {
         val key = "testKey"
         val value = true
-        val printer = MockPrinter()
-        val logger = Lager.create(printer, PrimitivesOnlyAccumulator)
+        val collector = MockCollector()
+        val logger = Lager.create(collector, PrimitivesOnlyAccumulator)
         logger.info("") {
             it.put(key, value)
         }
-        assertEquals(listOf(key to value), printer.values)
+        assertEquals(listOf(key to value), collector.values)
     }
 
     @Test
     fun printInfo() {
-        val printer = MockPrinter()
-        val logger = Lager.create(printer, PrimitivesOnlyAccumulator)
+        val collector = MockCollector()
+        val logger = Lager.create(collector, PrimitivesOnlyAccumulator)
         logger.info("")
-        assertEquals(Lager.INFO, printer.level)
+        assertEquals(Lager.INFO, collector.level)
     }
 
     @Test
     fun printError() {
-        val printer = MockPrinter()
-        val logger = Lager.create(printer, PrimitivesOnlyAccumulator)
+        val collector = MockCollector()
+        val logger = Lager.create(collector, PrimitivesOnlyAccumulator)
         logger.error("")
-        assertEquals(Lager.ERROR, printer.level)
+        assertEquals(Lager.ERROR, collector.level)
     }
 
     @Test
     fun printDebug() {
-        val printer = MockPrinter()
-        val logger = Lager.create(printer, PrimitivesOnlyAccumulator)
+        val collector = MockCollector()
+        val logger = Lager.create(collector, PrimitivesOnlyAccumulator)
         logger.debug("")
-        assertEquals(Lager.DEBUG, printer.level)
+        assertEquals(Lager.DEBUG, collector.level)
     }
 
     @Test
     fun printWarning() {
-        val printer = MockPrinter()
-        val logger = Lager.create(printer, PrimitivesOnlyAccumulator)
+        val collector = MockCollector()
+        val logger = Lager.create(collector, PrimitivesOnlyAccumulator)
         logger.warning("")
-        assertEquals(Lager.WARNING, printer.level)
+        assertEquals(Lager.WARNING, collector.level)
     }
 
     @Test
     fun printCustomLevel() {
         val level = 666
-        val printer = MockPrinter()
+        val collector = MockCollector()
         val logger = Lager.create(
-            printer, PrimitivesOnlyAccumulator,
+            collector, PrimitivesOnlyAccumulator,
             printMask = Lager.makePrintMask(level)
         )
         logger.log(level, "")
-        assertEquals(level, printer.level)
+        assertEquals(level, collector.level)
     }
 
     @Test
     fun dontPrintInfo() {
-        val printer = MockPrinter()
+        val collector = MockCollector()
         val logger = Lager.create(
-            printer, PrimitivesOnlyAccumulator,
+            collector, PrimitivesOnlyAccumulator,
             printMask = Lager.makePrintMask(*levelsWithout(Lager.INFO))
         )
         logger.info("")
-        assertFalse(printer.wasPrinted)
+        assertFalse(collector.wasPrinted)
     }
 
     @Test
     fun dontPrintError() {
-        val printer = MockPrinter()
+        val collector = MockCollector()
         val logger = Lager.create(
-            printer, PrimitivesOnlyAccumulator,
+            collector, PrimitivesOnlyAccumulator,
             printMask = Lager.makePrintMask(*levelsWithout(Lager.ERROR))
         )
         logger.error("")
-        assertFalse(printer.wasPrinted)
+        assertFalse(collector.wasPrinted)
     }
 
     @Test
     fun dontPrintDebug() {
-        val printer = MockPrinter()
+        val collector = MockCollector()
         val logger = Lager.create(
-            printer, PrimitivesOnlyAccumulator,
+            collector, PrimitivesOnlyAccumulator,
             printMask = Lager.makePrintMask(*levelsWithout(Lager.DEBUG))
         )
         logger.debug("")
-        assertFalse(printer.wasPrinted)
+        assertFalse(collector.wasPrinted)
     }
 
     @Test
     fun dontPrintWarning() {
-        val printer = MockPrinter()
+        val collector = MockCollector()
         val logger = Lager.create(
-            printer, PrimitivesOnlyAccumulator,
+            collector, PrimitivesOnlyAccumulator,
             printMask = Lager.makePrintMask(*levelsWithout(Lager.WARNING))
         )
         logger.warning("")
-        assertFalse(printer.wasPrinted)
+        assertFalse(collector.wasPrinted)
     }
 
     private fun levelsWithout(level: Int): IntArray {
         return Lager.allLevels.filter { it != level }.toIntArray()
     }
 
-    private class MockPrinter : TypedLager.Printer<PrimitivesOnlyAccumulator> {
+    private class MockCollector : TypedLager.Collector<PrimitivesOnlyAccumulator> {
         var wasPrinted = false
         var level: Int? = null
         var owner: String? = null
