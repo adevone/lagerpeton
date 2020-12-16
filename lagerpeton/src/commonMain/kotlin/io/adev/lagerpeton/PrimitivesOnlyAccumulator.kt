@@ -7,19 +7,7 @@ class PrimitivesOnlyAccumulator private constructor() {
         values[key] = value
     }
 
-    fun put(key: String, value: Int) {
-        values[key] = value
-    }
-
-    fun put(key: String, value: Long) {
-        values[key] = value
-    }
-
-    fun put(key: String, value: Float) {
-        values[key] = value
-    }
-
-    fun put(key: String, value: Double) {
+    fun put(key: String, value: Number) {
         values[key] = value
     }
 
