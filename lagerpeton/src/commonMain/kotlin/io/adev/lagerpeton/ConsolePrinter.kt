@@ -54,3 +54,19 @@ object ConsolePrinter : TypedLager.Printer<PrimitivesOnlyAccumulator> {
         }
     }
 }
+
+fun TypedLager.Companion.console(
+    printMask: Int = INFO or ERROR or DEBUG or WARNING,
+    owner: String? = null,
+    onEachLog: AppendToAccumulator<PrimitivesOnlyAccumulator>? = null,
+    makeStored: AppendToAccumulator<PrimitivesOnlyAccumulator>? = null
+): TypedLager<PrimitivesOnlyAccumulator> {
+    return create(
+        ConsolePrinter,
+        PrimitivesOnlyAccumulator,
+        printMask,
+        owner,
+        onEachLog,
+        makeStored
+    )
+}

@@ -35,3 +35,19 @@ object AndroidPrinter : TypedLager.Printer<PrimitivesOnlyAccumulator> {
 
     private const val DEFAULT_OWNER = "AndroidPrinter"
 }
+
+fun TypedLager.Companion.android(
+    printMask: Int = INFO or ERROR or DEBUG or WARNING,
+    owner: String? = null,
+    onEachLog: AppendToAccumulator<PrimitivesOnlyAccumulator>? = null,
+    makeStored: AppendToAccumulator<PrimitivesOnlyAccumulator>? = null
+): TypedLager<PrimitivesOnlyAccumulator> {
+    return create(
+        AndroidPrinter,
+        PrimitivesOnlyAccumulator,
+        printMask,
+        owner,
+        onEachLog,
+        makeStored
+    )
+}
