@@ -13,7 +13,10 @@ allprojects {
 
 // in module build.gradle
 dependencies {
-    implementation("io.adev:lagerpeton:0.1.0")
+    implementation("io.adev:lagerpeton:0.1.7")
+    
+    // for android projects
+    implementation("io.adev:lagerpeton-android:0.1.7")
 }
 ```
 
@@ -24,7 +27,7 @@ Lagerpeton allows accumulation of context for logging.
 Example:
 ```kotlin
 // In App class
-val globalLogger = Lager.new(AndroidPrinter) {
+val globalLogger = Lager.android {
     it.put("appVersion", "1.0.0")
     it.put("platform", "Android")
 }
@@ -32,17 +35,23 @@ val globalLogger = Lager.new(AndroidPrinter) {
 class SomeViewModel {
 
     // In class
-    val classLogger = globalLogger.new(owner = "SomeViewModel") {
+    val classLogger = globalLogger.new(
+        owner = "SomeViewModel",
         // always will get current value 
         // because lambda evaluates on each logging
-        it.put("state", someState)
+        onEachLog = {
+            it.put("state", someState)
+        }
+    ) {
+        // put static context. Will not be evaluated on each logging
+        it.put("param", param)
     }
 
     fun eventHappened(arg1: String, arg2: String) {
         // On logging
         // If "info" logging level is disabled 
         // the lambda below will NOT be evaluated
-        // just as lambdas of [classLogger] and [globalLogger]
+        // just as onEachLog of [classLogger] and [globalLogger]
         classLogger.info("something happened") {
             it.put("arg1", arg1)
             it.put("arg2", arg2)
