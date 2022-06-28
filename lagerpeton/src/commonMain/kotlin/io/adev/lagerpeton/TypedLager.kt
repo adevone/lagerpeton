@@ -13,7 +13,7 @@ class TypedLager<TAccumulator> private constructor(
         owner: String? = this.owner,
         append: AppendToAccumulator<TAccumulator>? = null
     ) {
-        log(INFO, message, owner, append)
+        log(INFO_LEVEL, message, owner, append)
     }
 
     fun error(
@@ -21,7 +21,7 @@ class TypedLager<TAccumulator> private constructor(
         owner: String? = this.owner,
         append: AppendToAccumulator<TAccumulator>? = null
     ) {
-        log(ERROR, message, owner, append)
+        log(ERROR_LEVEL, message, owner, append)
     }
 
     fun debug(
@@ -29,7 +29,7 @@ class TypedLager<TAccumulator> private constructor(
         owner: String? = this.owner,
         append: AppendToAccumulator<TAccumulator>? = null
     ) {
-        log(DEBUG, message, owner, append)
+        log(DEBUG_LEVEL, message, owner, append)
     }
 
     fun warning(
@@ -37,7 +37,7 @@ class TypedLager<TAccumulator> private constructor(
         owner: String? = this.owner,
         append: AppendToAccumulator<TAccumulator>? = null
     ) {
-        log(WARNING, message, owner, append)
+        log(WARNING_LEVEL, message, owner, append)
     }
 
     fun log(
@@ -99,7 +99,7 @@ class TypedLager<TAccumulator> private constructor(
         fun <TAccumulator> create(
             collector: Collector<TAccumulator>,
             accumulatorFactory: AccumulatorFactory<TAccumulator>,
-            printMask: Int = INFO or ERROR or DEBUG or WARNING,
+            printMask: Int = INFO_LEVEL or ERROR_LEVEL or DEBUG_LEVEL or WARNING_LEVEL,
             owner: String? = null,
             onEachLog: AppendToAccumulator<TAccumulator>? = null,
             makeStored: AppendToAccumulator<TAccumulator>? = null
@@ -121,10 +121,10 @@ class TypedLager<TAccumulator> private constructor(
         }
 
         // @formatter:off
-        const val INFO    = 0b0001
-        const val ERROR   = 0b0010
-        const val DEBUG   = 0b0100
-        const val WARNING = 0b1000
+        const val INFO_LEVEL    = 0b0001
+        const val ERROR_LEVEL   = 0b0010
+        const val DEBUG_LEVEL   = 0b0100
+        const val WARNING_LEVEL = 0b1000
         // @formatter:on
 
         fun makePrintMask(vararg levels: Int): Int {
@@ -135,7 +135,13 @@ class TypedLager<TAccumulator> private constructor(
             return totalMask
         }
 
-        val allLevels: Array<Int> get() = arrayOf(INFO, ERROR, DEBUG, WARNING)
+        val allLevels: Array<Int>
+            get() = arrayOf(
+                INFO_LEVEL,
+                ERROR_LEVEL,
+                DEBUG_LEVEL,
+                WARNING_LEVEL
+            )
     }
 }
 

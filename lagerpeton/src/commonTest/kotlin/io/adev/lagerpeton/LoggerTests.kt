@@ -142,7 +142,7 @@ class LoggerTests {
         val collector = MockCollector()
         val logger = Lager.create(
             collector, PrimitivesOnlyAccumulator,
-            printMask = Lager.makePrintMask(Lager.ERROR),
+            printMask = Lager.makePrintMask(Lager.ERROR_LEVEL),
             onEachLog = {
                 throw IllegalStateException("global append must not me called")
             }
@@ -279,7 +279,7 @@ class LoggerTests {
         val collector = MockCollector()
         val logger = Lager.create(collector, PrimitivesOnlyAccumulator)
         logger.info("")
-        assertEquals(Lager.INFO, collector.level)
+        assertEquals(Lager.INFO_LEVEL, collector.level)
     }
 
     @Test
@@ -287,7 +287,7 @@ class LoggerTests {
         val collector = MockCollector()
         val logger = Lager.create(collector, PrimitivesOnlyAccumulator)
         logger.error("")
-        assertEquals(Lager.ERROR, collector.level)
+        assertEquals(Lager.ERROR_LEVEL, collector.level)
     }
 
     @Test
@@ -295,7 +295,7 @@ class LoggerTests {
         val collector = MockCollector()
         val logger = Lager.create(collector, PrimitivesOnlyAccumulator)
         logger.debug("")
-        assertEquals(Lager.DEBUG, collector.level)
+        assertEquals(Lager.DEBUG_LEVEL, collector.level)
     }
 
     @Test
@@ -303,7 +303,7 @@ class LoggerTests {
         val collector = MockCollector()
         val logger = Lager.create(collector, PrimitivesOnlyAccumulator)
         logger.warning("")
-        assertEquals(Lager.WARNING, collector.level)
+        assertEquals(Lager.WARNING_LEVEL, collector.level)
     }
 
     @Test
@@ -323,7 +323,7 @@ class LoggerTests {
         val collector = MockCollector()
         val logger = Lager.create(
             collector, PrimitivesOnlyAccumulator,
-            printMask = Lager.makePrintMask(*levelsWithout(Lager.INFO))
+            printMask = Lager.makePrintMask(*levelsWithout(Lager.INFO_LEVEL))
         )
         logger.info("")
         assertFalse(collector.wasPrinted)
@@ -334,7 +334,7 @@ class LoggerTests {
         val collector = MockCollector()
         val logger = Lager.create(
             collector, PrimitivesOnlyAccumulator,
-            printMask = Lager.makePrintMask(*levelsWithout(Lager.ERROR))
+            printMask = Lager.makePrintMask(*levelsWithout(Lager.ERROR_LEVEL))
         )
         logger.error("")
         assertFalse(collector.wasPrinted)
@@ -345,7 +345,7 @@ class LoggerTests {
         val collector = MockCollector()
         val logger = Lager.create(
             collector, PrimitivesOnlyAccumulator,
-            printMask = Lager.makePrintMask(*levelsWithout(Lager.DEBUG))
+            printMask = Lager.makePrintMask(*levelsWithout(Lager.DEBUG_LEVEL))
         )
         logger.debug("")
         assertFalse(collector.wasPrinted)
@@ -356,7 +356,7 @@ class LoggerTests {
         val collector = MockCollector()
         val logger = Lager.create(
             collector, PrimitivesOnlyAccumulator,
-            printMask = Lager.makePrintMask(*levelsWithout(Lager.WARNING))
+            printMask = Lager.makePrintMask(*levelsWithout(Lager.WARNING_LEVEL))
         )
         logger.warning("")
         assertFalse(collector.wasPrinted)

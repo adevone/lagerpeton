@@ -56,7 +56,7 @@ object ConsoleCollector : TypedLager.Collector<PrimitivesOnlyAccumulator> {
 }
 
 fun TypedLager.Companion.console(
-    printMask: Int = INFO or ERROR or DEBUG or WARNING,
+    printMask: Int = INFO_LEVEL or ERROR_LEVEL or DEBUG_LEVEL or WARNING_LEVEL,
     owner: String? = null,
     onEachLog: AppendToAccumulator<PrimitivesOnlyAccumulator>? = null,
     makeStored: AppendToAccumulator<PrimitivesOnlyAccumulator>? = null
