@@ -49,10 +49,10 @@ fun TypedLager.Companion.kotlinxSerialization(
     collector: TypedLager.Collector<KotlinxSerializationAccumulator> =
         TypedLager.Collector { level, collectOwner, message, accumulator ->
             val jsonLevel: String? = when (level) {
-                Lager.INFO -> "info"
-                Lager.ERROR -> "error"
-                Lager.DEBUG -> "debug"
-                Lager.WARNING -> "warning"
+                Lager.INFO_LEVEL -> "info"
+                Lager.ERROR_LEVEL -> "error"
+                Lager.DEBUG_LEVEL -> "debug"
+                Lager.WARNING_LEVEL -> "warning"
                 else -> null
             }
             if (jsonLevel != null) {
@@ -63,7 +63,7 @@ fun TypedLager.Companion.kotlinxSerialization(
             val json = accumulator.buildJsonObject()
             collect(json)
         },
-    printMask: Int = INFO or ERROR or DEBUG or WARNING,
+    printMask: Int = INFO_LEVEL or ERROR_LEVEL or DEBUG_LEVEL or WARNING_LEVEL,
     owner: String? = null,
     onEachLog: AppendToAccumulator<KotlinxSerializationAccumulator>? = null,
     makeStored: AppendToAccumulator<KotlinxSerializationAccumulator>? = null

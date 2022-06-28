@@ -46,20 +46,12 @@ class SomeViewModel {
 ## Dependency
 
 ```kotlin
-// in root build.gradle
-allprojects {
-    repositories {
-        // ...
-        maven { url = uri("https://dl.bintray.com/summermpp/summer") }
-    }
-}
-
 // in module build.gradle
 dependencies {
-    implementation("io.adev:lagerpeton:0.1.7")
+    implementation("com.github.adevone.summer:lagerpeton:0.1.8")
     
     // for android projects
-    implementation("io.adev:lagerpeton-android:0.1.7")
+    implementation("com.github.adevone.summer:lagerpeton-android:0.1.8")
 }
 ```
 

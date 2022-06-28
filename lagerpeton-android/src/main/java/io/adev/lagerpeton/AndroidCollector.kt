@@ -18,16 +18,16 @@ object AndroidCollector : TypedLager.Collector<PrimitivesOnlyAccumulator> {
             ConsoleCollector.Formatter.appendParameters(accumulator, builder = this)
         }
         when (level) {
-            Lager.INFO -> {
+            Lager.INFO_LEVEL -> {
                 Log.i(owner ?: DEFAULT_OWNER, logMessage)
             }
-            Lager.ERROR -> {
+            Lager.ERROR_LEVEL -> {
                 Log.e(owner ?: DEFAULT_OWNER, logMessage)
             }
-            Lager.DEBUG -> {
+            Lager.DEBUG_LEVEL -> {
                 Log.d(owner ?: DEFAULT_OWNER, logMessage)
             }
-            Lager.WARNING -> {
+            Lager.WARNING_LEVEL -> {
                 Log.w(owner ?: DEFAULT_OWNER, logMessage)
             }
         }
@@ -37,7 +37,7 @@ object AndroidCollector : TypedLager.Collector<PrimitivesOnlyAccumulator> {
 }
 
 fun TypedLager.Companion.android(
-    printMask: Int = INFO or ERROR or DEBUG or WARNING,
+    printMask: Int = INFO_LEVEL or ERROR_LEVEL or DEBUG_LEVEL or WARNING_LEVEL,
     owner: String? = null,
     onEachLog: AppendToAccumulator<PrimitivesOnlyAccumulator>? = null,
     makeStored: AppendToAccumulator<PrimitivesOnlyAccumulator>? = null

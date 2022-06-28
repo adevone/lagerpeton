@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion(targetVersion)
+    compileSdk = targetVersion
 
     defaultConfig {
-        minSdkVersion(minVersion)
-        targetSdkVersion(targetVersion)
+        minSdk = minVersion
+        targetSdk = targetVersion
         applicationId = "io.adev.lagerpeton.example"
         versionCode = 1
         versionName = "1.0"
@@ -36,13 +36,13 @@ android {
 dependencies {
     implementation(kotlin("stdlib"))
 
-    implementation("io.adev:lagerpeton:$lagerpetonVersion")
-    implementation("io.adev:lagerpeton-android:$lagerpetonVersion")
+    implementation("$lagerpetonGroup:lagerpeton:$lagerpetonVersion")
+    implementation("$lagerpetonGroup:lagerpeton-android:$lagerpetonVersion")
 //    implementation(project(":lagerpeton"))
 //    implementation(project(":lagerpeton-android"))
 
-    implementation("androidx.appcompat:appcompat:1.2.0")
-    implementation("androidx.core:core-ktx:1.3.2")
+    implementation("androidx.appcompat:appcompat:1.4.2")
+    implementation("androidx.core:core-ktx:1.8.0")
 
     implementation(kotlin("test"))
     implementation(kotlin("test-junit"))

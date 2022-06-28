@@ -1,31 +1,17 @@
-import java.util.*
-
 plugins {
     kotlin("multiplatform")
-    id("maven-publish")
+    id("convention.publication.multiplatform")
 }
-
-group = lagerpetonGroup
-version = lagerpetonVersion
 
 kotlin {
     jvm()
-    iosArm64 {
-        binaries {
-            framework()
-        }
-    }
-    iosArm32 {
-        binaries {
-            framework()
-        }
-    }
-    iosX64 {
+    ios {
         binaries {
             framework()
         }
     }
 
+    @Suppress("UNUSED_VARIABLE")
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -49,34 +35,16 @@ kotlin {
                 implementation(kotlin("test-junit"))
             }
         }
-        val iosArm64Main by getting {
+        val iosMain by getting {
             dependencies {
 
             }
         }
-        getByName("iosX64Main").dependsOn(getByName("iosArm64Main"))
-        getByName("iosArm32Main").dependsOn(getByName("iosArm64Main"))
     }
 }
 
-val propsFile = File(rootProject.rootDir, "bintray.properties")
-if (propsFile.exists()) {
-    publishing {
-        val bintrayProps = Properties().apply {
-            load(propsFile.inputStream())
-        }
-        repositories {
-            maven("https://api.bintray.com/maven/summermpp/summer/lagerpeton/;publish=0;override=1") {
-                name = "bintray"
-
-                credentials {
-                    username = bintrayProps.getProperty("USERNAME")
-                    password = bintrayProps.getProperty("API_KEY")
-                }
-            }
-        }
-    }
-}
+group = lagerpetonGroup
+version = lagerpetonVersion
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {

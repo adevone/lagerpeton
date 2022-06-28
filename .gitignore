@@ -1,5 +1,6 @@
 /build
 /.idea
 /.gradle
-bintray.properties
+local.properties
+sonatype.properties
 *.DS_Store

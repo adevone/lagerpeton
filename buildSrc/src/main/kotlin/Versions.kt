@@ -1,12 +1,12 @@
-const val lagerpetonVersion = "0.1.7"
-const val lagerpetonGroup = "io.adev"
+const val lagerpetonVersion = "0.1.8"
+const val lagerpetonGroup = "com.github.adevone.summer"
 
 // library dependencies
-const val kotlinVersion = "1.4.10"
+const val kotlinVersion = "1.6.21"
 
 // serialization
-const val serializationVersion = "1.0.0"
+const val serializationVersion = "1.3.2"
 
 // android
-const val targetVersion = 29
+const val targetVersion = 31
 const val minVersion = 21

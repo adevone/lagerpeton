@@ -1,4 +1,4 @@
-enableFeaturePreview("GRADLE_METADATA")
+includeBuild("convention-plugins")
 
 include(":app")
 include(":lagerpeton")
