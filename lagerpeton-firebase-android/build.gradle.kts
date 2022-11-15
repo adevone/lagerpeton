@@ -8,7 +8,7 @@ android {
     compileSdk = targetVersion
 
     defaultConfig {
-        minSdk = 14
+        minSdk = 16
         targetSdk = targetVersion
     }
 
@@ -18,11 +18,15 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
     }
-    namespace = "lagerpeton.android"
+    namespace = "lagerpeton.firebase.android"
 }
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+
+    implementation(platform("com.google.firebase:firebase-bom:29.0.3"))
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
+
     implementation(project(":lagerpeton"))
 }
 

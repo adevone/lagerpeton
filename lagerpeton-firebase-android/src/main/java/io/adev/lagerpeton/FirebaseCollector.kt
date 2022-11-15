@@ -1,8 +1,10 @@
 package io.adev.lagerpeton
 
-import android.util.Log
+import com.google.firebase.crashlytics.internal.common.CrashlyticsCore
 
-object AndroidCollector : TypedLager.Collector<PrimitivesOnlyAccumulator> {
+class FirebaseCollector(
+    private val crashlyticsCore: CrashlyticsCore,
+) : TypedLager.Collector<PrimitivesOnlyAccumulator> {
 
     override fun printLog(
         level: Int,
@@ -17,42 +19,24 @@ object AndroidCollector : TypedLager.Collector<PrimitivesOnlyAccumulator> {
             if (hasValues) {
                 append(", ")
             }
-            if (throwable != null) {
-                if (message.isNotEmpty() || hasValues) {
-                    append(", ")
-                }
-                append("stacktrace=")
-                append(throwable.stackTraceToString())
-            }
             ConsoleCollector.Formatter.appendParameters(accumulator, builder = this)
         }
-        when (level) {
-            Lager.INFO_LEVEL -> {
-                Log.i(owner ?: DEFAULT_OWNER, logMessage)
-            }
-            Lager.ERROR_LEVEL -> {
-                Log.e(owner ?: DEFAULT_OWNER, logMessage)
-            }
-            Lager.DEBUG_LEVEL -> {
-                Log.d(owner ?: DEFAULT_OWNER, logMessage)
-            }
-            Lager.WARNING_LEVEL -> {
-                Log.w(owner ?: DEFAULT_OWNER, logMessage)
-            }
+        crashlyticsCore.log(logMessage)
+        if (throwable != null) {
+            crashlyticsCore.logException(throwable)
         }
     }
-
-    private const val DEFAULT_OWNER = "AndroidPrinter"
 }
 
-fun TypedLager.Companion.android(
+fun TypedLager.Companion.firebase(
+    crashlyticsCore: CrashlyticsCore,
     printMask: Int = INFO_LEVEL or ERROR_LEVEL or DEBUG_LEVEL or WARNING_LEVEL,
     owner: String? = null,
     onEachLog: AppendToAccumulator<PrimitivesOnlyAccumulator>? = null,
     makeStored: AppendToAccumulator<PrimitivesOnlyAccumulator>? = null
 ): TypedLager<PrimitivesOnlyAccumulator> {
     return create(
-        collector = AndroidCollector,
+        collector = FirebaseCollector(crashlyticsCore),
         accumulatorFactory = PrimitivesOnlyAccumulator,
         printMask,
         owner,

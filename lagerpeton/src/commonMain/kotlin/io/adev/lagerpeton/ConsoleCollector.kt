@@ -6,9 +6,10 @@ object ConsoleCollector : TypedLager.Collector<PrimitivesOnlyAccumulator> {
         level: Int,
         owner: String?,
         message: String,
+        throwable: Throwable?,
         accumulator: PrimitivesOnlyAccumulator
     ) {
-        val logMessage = Formatter.format(owner, message, accumulator)
+        val logMessage = Formatter.format(owner, message, throwable, accumulator)
         println(logMessage)
     }
 
@@ -17,20 +18,29 @@ object ConsoleCollector : TypedLager.Collector<PrimitivesOnlyAccumulator> {
         fun format(
             owner: String?,
             message: String?,
+            throwable: Throwable?,
             accumulator: PrimitivesOnlyAccumulator
         ): String {
             return buildString {
-                owner?.let { owner ->
+                if (owner != null) {
                     append(owner)
                     append(": ")
                 }
-                message?.let { message ->
+                if (message != null) {
                     append(message)
                 }
-                if (accumulator.values.isNotEmpty()) {
+                val hasValues = accumulator.values.isNotEmpty()
+                if (hasValues) {
                     append(", ")
                 }
                 appendParameters(accumulator, builder = this)
+                if (throwable != null) {
+                    if (message?.isNotEmpty() == true || hasValues) {
+                        append(", ")
+                    }
+                    append("stacktrace=")
+                    append(throwable.stackTraceToString())
+                }
             }
         }
 
