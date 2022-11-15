@@ -11,39 +11,44 @@ class TypedLager<TAccumulator> private constructor(
     fun info(
         message: String,
         owner: String? = this.owner,
+        throwable: Throwable? = null,
         append: AppendToAccumulator<TAccumulator>? = null
     ) {
-        log(INFO_LEVEL, message, owner, append)
+        log(INFO_LEVEL, message, owner, throwable, append)
     }
 
     fun error(
         message: String,
         owner: String? = this.owner,
+        throwable: Throwable? = null,
         append: AppendToAccumulator<TAccumulator>? = null
     ) {
-        log(ERROR_LEVEL, message, owner, append)
+        log(ERROR_LEVEL, message, owner, throwable, append)
     }
 
     fun debug(
         message: String,
         owner: String? = this.owner,
+        throwable: Throwable? = null,
         append: AppendToAccumulator<TAccumulator>? = null
     ) {
-        log(DEBUG_LEVEL, message, owner, append)
+        log(DEBUG_LEVEL, message, owner, throwable, append)
     }
 
     fun warning(
         message: String,
         owner: String? = this.owner,
+        throwable: Throwable? = null,
         append: AppendToAccumulator<TAccumulator>? = null
     ) {
-        log(WARNING_LEVEL, message, owner, append)
+        log(WARNING_LEVEL, message, owner, throwable, append)
     }
 
     fun log(
         level: Int,
         message: String,
         owner: String? = this.owner,
+        throwable: Throwable? = null,
         append: AppendToAccumulator<TAccumulator>? = null
     ) {
         if (printMask and level != 0) {
@@ -54,7 +59,7 @@ class TypedLager<TAccumulator> private constructor(
             if (append != null) {
                 append(accumulator)
             }
-            collector.printLog(level, owner, message, accumulator)
+            collector.printLog(level, owner, message, throwable, accumulator)
         }
     }
 
@@ -84,7 +89,13 @@ class TypedLager<TAccumulator> private constructor(
     }
 
     fun interface Collector<TAccumulator> {
-        fun printLog(level: Int, owner: String?, message: String, accumulator: TAccumulator)
+        fun printLog(
+            level: Int,
+            owner: String?,
+            message: String,
+            throwable: Throwable?,
+            accumulator: TAccumulator
+        )
     }
 
     interface AccumulatorFactory<TAccumulator> {

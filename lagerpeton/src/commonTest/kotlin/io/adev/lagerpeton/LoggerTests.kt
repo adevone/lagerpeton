@@ -377,6 +377,7 @@ class LoggerTests {
             level: Int,
             owner: String?,
             message: String,
+            throwable: Throwable?,
             accumulator: PrimitivesOnlyAccumulator
         ) {
             this.wasPrinted = true

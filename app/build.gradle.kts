@@ -31,6 +31,7 @@ android {
             isDebuggable = true
         }
     }
+    namespace = "io.adev.lagerpeton.example"
 }
 
 dependencies {

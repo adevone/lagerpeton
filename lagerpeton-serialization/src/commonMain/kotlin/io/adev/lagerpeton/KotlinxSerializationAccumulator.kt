@@ -47,7 +47,7 @@ class KotlinxSerializationAccumulator {
 fun TypedLager.Companion.kotlinxSerialization(
     collect: (json: JsonObject) -> Unit,
     collector: TypedLager.Collector<KotlinxSerializationAccumulator> =
-        TypedLager.Collector { level, collectOwner, message, accumulator ->
+        TypedLager.Collector { level, collectOwner, message, throwable, accumulator ->
             val jsonLevel: String? = when (level) {
                 Lager.INFO_LEVEL -> "info"
                 Lager.ERROR_LEVEL -> "error"
@@ -60,6 +60,9 @@ fun TypedLager.Companion.kotlinxSerialization(
             }
             accumulator.put("from", collectOwner)
             accumulator.put("message", message)
+            if (throwable != null) {
+                accumulator.put("stacktrace", throwable.stackTraceToString())
+            }
             val json = accumulator.buildJsonObject()
             collect(json)
         },
