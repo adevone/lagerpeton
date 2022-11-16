@@ -11,6 +11,16 @@ kotlin {
             framework()
         }
     }
+    iosArm32 {
+        binaries {
+            framework()
+        }
+    }
+    iosSimulatorArm64 {
+        binaries {
+            framework()
+        }
+    }
 
     @Suppress("UNUSED_VARIABLE")
     sourceSets {
@@ -35,10 +45,6 @@ kotlin {
             dependencies {
                 implementation(kotlin("test"))
                 implementation(kotlin("test-junit"))
-            }
-        }
-        val iosMain by getting {
-            dependencies {
             }
         }
     }

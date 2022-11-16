@@ -24,8 +24,7 @@ android {
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
 
-    implementation(platform("com.google.firebase:firebase-bom:29.0.3"))
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
+    implementation("com.google.firebase:firebase-crashlytics-ktx:18.2.6")
 
     implementation(project(":lagerpeton"))
 }
