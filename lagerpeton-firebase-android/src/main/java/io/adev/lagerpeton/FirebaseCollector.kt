@@ -4,7 +4,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class FirebaseCollector(
     private val crashlytics: FirebaseCrashlytics,
-) : TypedLager.Collector<PrimitivesOnlyAccumulator> {
+) : TypedLager.Collector<PrimitivesOnlyAccumulator>() {
 
     override fun printLog(
         level: Int,

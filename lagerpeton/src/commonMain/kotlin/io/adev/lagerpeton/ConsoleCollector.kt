@@ -1,6 +1,6 @@
 package io.adev.lagerpeton
 
-object ConsoleCollector : TypedLager.Collector<PrimitivesOnlyAccumulator> {
+object ConsoleCollector : TypedLager.Collector<PrimitivesOnlyAccumulator>() {
 
     override fun printLog(
         level: Int,

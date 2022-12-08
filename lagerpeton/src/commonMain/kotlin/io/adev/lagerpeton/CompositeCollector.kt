@@ -7,7 +7,7 @@ import io.adev.lagerpeton.TypedLager.Companion.WARNING_LEVEL
 
 class CompositeCollector<TAccumulator>(
     private val collectors: List<ComposedCollector<TAccumulator>>,
-) : TypedLager.Collector<TAccumulator> {
+) : TypedLager.Collector<TAccumulator>() {
 
     override fun printLog(
         level: Int,

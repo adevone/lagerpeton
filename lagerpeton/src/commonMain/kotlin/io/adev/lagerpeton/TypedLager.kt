@@ -88,8 +88,8 @@ class TypedLager<TAccumulator> private constructor(
         )
     }
 
-    fun interface Collector<TAccumulator> {
-        fun printLog(
+    abstract class Collector<TAccumulator> {
+        abstract fun printLog(
             level: Int,
             owner: String?,
             message: String,
