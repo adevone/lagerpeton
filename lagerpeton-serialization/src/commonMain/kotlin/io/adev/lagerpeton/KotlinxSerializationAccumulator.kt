@@ -1,6 +1,12 @@
 package io.adev.lagerpeton
 
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.JsonArrayBuilder
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonObjectBuilder
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.buildJsonArray
+import kotlinx.serialization.json.buildJsonObject
 
 class KotlinxSerializationAccumulator {
     val content: MutableMap<String, JsonElement> = linkedMapOf()
@@ -47,24 +53,32 @@ class KotlinxSerializationAccumulator {
 fun TypedLager.Companion.kotlinxSerialization(
     collect: (json: JsonObject) -> Unit,
     collector: TypedLager.Collector<KotlinxSerializationAccumulator> =
-        TypedLager.Collector { level, collectOwner, message, throwable, accumulator ->
-            val jsonLevel: String? = when (level) {
-                Lager.INFO_LEVEL -> "info"
-                Lager.ERROR_LEVEL -> "error"
-                Lager.DEBUG_LEVEL -> "debug"
-                Lager.WARNING_LEVEL -> "warning"
-                else -> null
+        object : TypedLager.Collector<KotlinxSerializationAccumulator>() {
+            override fun printLog(
+                level: Int,
+                owner: String?,
+                message: String,
+                throwable: Throwable?,
+                accumulator: KotlinxSerializationAccumulator
+            ) {
+                val jsonLevel: String? = when (level) {
+                    Lager.INFO_LEVEL -> "info"
+                    Lager.ERROR_LEVEL -> "error"
+                    Lager.DEBUG_LEVEL -> "debug"
+                    Lager.WARNING_LEVEL -> "warning"
+                    else -> null
+                }
+                if (jsonLevel != null) {
+                    accumulator.put("level", jsonLevel)
+                }
+                accumulator.put("from", owner)
+                accumulator.put("message", message)
+                if (throwable != null) {
+                    accumulator.put("stacktrace", throwable.stackTraceToString())
+                }
+                val json = accumulator.buildJsonObject()
+                collect(json)
             }
-            if (jsonLevel != null) {
-                accumulator.put("level", jsonLevel)
-            }
-            accumulator.put("from", collectOwner)
-            accumulator.put("message", message)
-            if (throwable != null) {
-                accumulator.put("stacktrace", throwable.stackTraceToString())
-            }
-            val json = accumulator.buildJsonObject()
-            collect(json)
         },
     printMask: Int = INFO_LEVEL or ERROR_LEVEL or DEBUG_LEVEL or WARNING_LEVEL,
     owner: String? = null,

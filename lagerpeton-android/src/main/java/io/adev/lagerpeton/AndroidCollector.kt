@@ -2,7 +2,7 @@ package io.adev.lagerpeton
 
 import android.util.Log
 
-object AndroidCollector : TypedLager.Collector<PrimitivesOnlyAccumulator> {
+object AndroidCollector : TypedLager.Collector<PrimitivesOnlyAccumulator>() {
 
     override fun printLog(
         level: Int,
