@@ -11,14 +11,13 @@ class TypedLager<TAccumulator> private constructor(
     fun info(
         message: String,
         owner: String? = this.owner,
-        throwable: Throwable? = null,
         append: AppendToAccumulator<TAccumulator>? = null
     ) {
-        log(INFO_LEVEL, message, owner, throwable, append)
+        log(INFO_LEVEL, message, owner, throwable = null, append)
     }
 
     fun error(
-        message: String,
+        message: String = "",
         owner: String? = this.owner,
         throwable: Throwable? = null,
         append: AppendToAccumulator<TAccumulator>? = null
@@ -29,14 +28,13 @@ class TypedLager<TAccumulator> private constructor(
     fun debug(
         message: String,
         owner: String? = this.owner,
-        throwable: Throwable? = null,
         append: AppendToAccumulator<TAccumulator>? = null
     ) {
-        log(DEBUG_LEVEL, message, owner, throwable, append)
+        log(DEBUG_LEVEL, message, owner, throwable = null, append)
     }
 
     fun warning(
-        message: String,
+        message: String = "",
         owner: String? = this.owner,
         throwable: Throwable? = null,
         append: AppendToAccumulator<TAccumulator>? = null
@@ -46,7 +44,7 @@ class TypedLager<TAccumulator> private constructor(
 
     fun log(
         level: Int,
-        message: String,
+        message: String = "",
         owner: String? = this.owner,
         throwable: Throwable? = null,
         append: AppendToAccumulator<TAccumulator>? = null

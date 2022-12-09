@@ -1,4 +1,4 @@
-const val lagerpetonVersion = "0.1.17"
+const val lagerpetonVersion = "0.1.18"
 const val lagerpetonGroup = "com.github.adevone.summer"
 
 // library dependencies
